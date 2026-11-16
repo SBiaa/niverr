@@ -65,8 +65,8 @@ export default async function Admin({ searchParams }: { searchParams: Promise<{ 
     <div className="min-h-screen bg-zinc-50">
       <header className="border-b border-zinc-200 bg-zinc-900 text-white">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-          <span className="font-fun text-xl font-bold">niverr · admin da plataforma</span>
-          <Link href="/painel" className="text-sm text-zinc-300">Meu painel →</Link>
+          <span className="font-fun text-xl font-bold">niverr · admin<span className="hidden sm:inline"> da plataforma</span></span>
+          <Link href="/painel" className="whitespace-nowrap text-sm text-zinc-300">Meu painel →</Link>
         </div>
       </header>
       <main className="mx-auto max-w-6xl px-4 py-6">
@@ -170,8 +170,8 @@ export default async function Admin({ searchParams }: { searchParams: Promise<{ 
                   <span className={`rounded px-2 py-0.5 text-xs font-semibold ${e.source === "client" ? "bg-amber-100 text-amber-800" : "bg-red-100 text-red-700"}`}>
                     {e.source === "client" ? "navegador" : "servidor"}
                   </span>
-                  <span className="flex-1 font-mono text-sm">{e.message}</span>
-                  <span className="text-xs text-zinc-500">{e.path} · {fmtDateTime(e.createdAt)}</span>
+                  <span className="min-w-0 flex-1 basis-full break-all font-mono text-sm sm:basis-0">{e.message}</span>
+                  <span className="break-all text-xs text-zinc-500">{e.path} · {fmtDateTime(e.createdAt)}</span>
                 </summary>
                 {e.stack && <pre className="mt-2 max-h-64 overflow-auto rounded bg-zinc-900 p-3 text-xs text-zinc-100">{e.stack}</pre>}
                 {!e.resolved && (
@@ -203,9 +203,9 @@ async function Accesses() {
   const um = new Map(us.map((u) => [u.id, u]));
   return (
     <div className="card overflow-x-auto p-0">
-      <table className="w-full text-sm">
-        <thead className="bg-zinc-50 text-left text-xs uppercase text-zinc-500">
-          <tr><th className="p-3">Quando</th><th className="p-3">Evento</th><th className="p-3">Quem</th><th className="p-3">Dispositivo</th><th className="p-3">IP</th></tr>
+      <table className="w-full min-w-[480px] text-sm">
+        <thead className="whitespace-nowrap bg-zinc-50 text-left text-xs uppercase text-zinc-500">
+          <tr><th className="p-3">Quando</th><th className="p-3">Evento</th><th className="p-3">Quem</th><th className="hidden p-3 sm:table-cell">Dispositivo</th><th className="hidden p-3 sm:table-cell">IP</th></tr>
         </thead>
         <tbody>
           {logs.map((l) => {
@@ -218,8 +218,8 @@ async function Accesses() {
                 <td className="p-3">
                   {g ? <>{g.name} <span className="text-zinc-500">(festa de {g.party.honoreeName})</span></> : u ? <>{u.name} <span className="text-zinc-500">{u.email}</span></> : l.path}
                 </td>
-                <td className="p-3">{l.device}</td>
-                <td className="p-3 font-mono text-xs text-zinc-500">{l.ip}</td>
+                <td className="hidden p-3 sm:table-cell">{l.device}</td>
+                <td className="hidden p-3 font-mono text-xs text-zinc-500 sm:table-cell">{l.ip}</td>
               </tr>
             );
           })}
@@ -238,8 +238,8 @@ async function Parties() {
   });
   return (
     <div className="card overflow-x-auto p-0">
-      <table className="w-full text-sm">
-        <thead className="bg-zinc-50 text-left text-xs uppercase text-zinc-500">
+      <table className="w-full min-w-[720px] text-sm">
+        <thead className="whitespace-nowrap bg-zinc-50 text-left text-xs uppercase text-zinc-500">
           <tr><th className="p-3">Festa</th><th className="p-3">Organizador</th><th className="p-3">Data</th><th className="p-3">Convidados</th><th className="p-3">Abriram</th><th className="p-3">Vão</th><th className="p-3">Status</th></tr>
         </thead>
         <tbody>
@@ -270,8 +270,8 @@ async function Users() {
   const users = await db.user.findMany({ orderBy: { createdAt: "desc" }, take: 300, include: { _count: { select: { parties: true } } } });
   return (
     <div className="card overflow-x-auto p-0">
-      <table className="w-full text-sm">
-        <thead className="bg-zinc-50 text-left text-xs uppercase text-zinc-500">
+      <table className="w-full min-w-[560px] text-sm">
+        <thead className="whitespace-nowrap bg-zinc-50 text-left text-xs uppercase text-zinc-500">
           <tr><th className="p-3">Nome</th><th className="p-3">E-mail</th><th className="p-3">Festas</th><th className="p-3">Cadastro</th><th className="p-3">Último login</th></tr>
         </thead>
         <tbody>

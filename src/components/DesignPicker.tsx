@@ -17,21 +17,23 @@ export default function DesignPicker({ design, palette }: { design?: string; pal
   return (
     <div>
       <label className="label">Tema do convite</label>
+      <input type="hidden" name="design" value={id} />
+      {def.fields.map((f) => (
+        <input key={f.key} type="hidden" name={`p_${f.key}`} value={colors[f.key]} />
+      ))}
       <div className="flex flex-wrap gap-2">
         {Object.values(DESIGNS).map((d) => (
-          <label key={d.id} className="cursor-pointer">
-            <input
-              type="radio"
-              name="design"
-              value={d.id}
-              checked={id === d.id}
-              onChange={() => setId(d.id)}
-              className="peer sr-only"
-            />
-            <span className="inline-block rounded-full border border-zinc-200 bg-white px-4 py-2 peer-checked:border-pink-500 peer-checked:bg-pink-50">
-              {d.emoji} {d.label}
-            </span>
-          </label>
+          <button
+            key={d.id}
+            type="button"
+            aria-pressed={id === d.id}
+            onClick={() => setId(d.id)}
+            className={`inline-block rounded-full border px-4 py-2 ${
+              id === d.id ? "border-pink-500 bg-pink-50" : "border-zinc-200 bg-white"
+            }`}
+          >
+            {d.emoji} {d.label}
+          </button>
         ))}
       </div>
       <p className="mt-1 text-xs text-zinc-500">{def.description}</p>
@@ -46,7 +48,6 @@ export default function DesignPicker({ design, palette }: { design?: string; pal
               <label key={f.key} className="flex items-center gap-2 text-sm">
                 <input
                   type="color"
-                  name={`p_${f.key}`}
                   value={colors[f.key]}
                   onChange={(e) => setColors({ ...colors, [f.key]: e.target.value })}
                   className="h-9 w-9 shrink-0 cursor-pointer rounded-lg border border-zinc-200 bg-white p-0.5"

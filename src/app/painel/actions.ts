@@ -114,14 +114,19 @@ export async function regenerateLink(partyId: string, guestId: string) {
 }
 
 /* ---------- fotos ---------- */
-export async function uploadPhotos(partyId: string, form: FormData) {
+export async function uploadPhoto(partyId: string, form: FormData): Promise<{ error?: string }> {
   await ownParty(partyId);
-  const files = form.getAll("photos").filter((f): f is File => f instanceof File && f.size > 0);
-  for (const f of files.slice(0, 20)) {
+  const f = form.get("photo");
+  if (!(f instanceof File) || f.size === 0) return { error: "Nenhuma foto enviada" };
+  try {
     const url = await saveImage(f, `parties/${partyId}`);
     await db.photo.create({ data: { partyId, url } });
+  } catch (e) {
+    console.error("uploadPhoto", e);
+    return { error: e instanceof Error ? e.message : "Falha no envio" };
   }
   revalidatePath(`/painel/festa/${partyId}`);
+  return {};
 }
 
 export async function setCover(partyId: string, url: string | null) {

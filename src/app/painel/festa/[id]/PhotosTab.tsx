@@ -1,16 +1,11 @@
 import type { Party, Photo } from "@prisma/client";
-import { uploadPhotos, setCover, deletePhoto } from "../../actions";
-import SubmitButton from "@/components/SubmitButton";
+import { setCover, deletePhoto } from "../../actions";
+import PhotoUploadForm from "./PhotoUploadForm";
 
 export default function PhotosTab({ party, photos }: { party: Party; photos: Photo[] }) {
   return (
     <div className="space-y-5">
-      <form action={uploadPhotos.bind(null, party.id)} className="card space-y-3">
-        <p className="font-bold">Adicionar fotos do aniversariante</p>
-        <p className="text-sm text-zinc-600">Até 4MB por foto. A foto marcada como ⭐ capa aparece no topo do convite.</p>
-        <input type="file" name="photos" accept="image/*" multiple required className="block w-full text-sm" />
-        <SubmitButton pendingText="Enviando...">Enviar fotos</SubmitButton>
-      </form>
+      <PhotoUploadForm partyId={party.id} />
 
       {photos.length === 0 ? (
         <p className="text-center text-zinc-500">Nenhuma foto ainda.</p>

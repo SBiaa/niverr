@@ -3,6 +3,7 @@ import type { Party, Photo } from "@prisma/client";
 import { fmtDate, fmtTime, THEMES } from "@/lib/format";
 import MapButton from "@/app/c/[token]/MapButton";
 import Countdown from "@/app/c/[token]/Countdown";
+import Gallery from "@/components/Gallery";
 import DesignScene from "@/components/DesignScene";
 import { DESIGNS, isDark, resolvePalette } from "@/lib/designs";
 
@@ -139,14 +140,7 @@ export default function PartyView({
         {photos.length > 0 && (
           <section className="mt-8">
             <h2 className={`${theme.font} ${headTone} mb-3 text-center text-2xl font-bold`}>📸 Fotos</h2>
-            <div className="grid grid-cols-2 gap-2">
-              {photos.map((p) => (
-                <a key={p.id} href={p.url} target="_blank">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={p.url} alt="" loading="lazy" className="aspect-square w-full rounded-xl object-cover shadow-sm" />
-                </a>
-              ))}
-            </div>
+            <Gallery photos={photos} style={party.gallery} />
           </section>
         )}
 

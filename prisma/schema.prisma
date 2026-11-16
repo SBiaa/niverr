@@ -27,6 +27,7 @@ model Party {
   theme        String   @default("infantil") // infantil | quinze | adulto
   color        String   @default("#ec4899")
   design       String   @default("padrao") // padrao | floresta | ...
+  gallery      String   @default("grade") // grade | polaroid | mosaico | carrossel
   palette      String?  // JSON com as cores trocadas pelo organizador (só o que difere do padrão)
   date       DateTime
   endTime      String?

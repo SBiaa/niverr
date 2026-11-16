@@ -2,6 +2,7 @@ import { THEMES, toLocalInput } from "@/lib/format";
 import type { Party } from "@prisma/client";
 import SubmitButton from "./SubmitButton";
 import DesignPicker from "./DesignPicker";
+import { GALLERIES } from "@/lib/galleries";
 
 const COLORS = ["#ec4899", "#8b5cf6", "#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#c9a227", "#0f172a"];
 
@@ -42,6 +43,21 @@ export default function PartyForm({
       </div>
 
       <DesignPicker design={party?.design} palette={party?.palette} />
+
+      <div>
+        <label className="label">Estilo da galeria de fotos</label>
+        <div className="grid gap-2 sm:grid-cols-2">
+          {Object.values(GALLERIES).map((g) => (
+            <label key={g.id} className="cursor-pointer">
+              <input type="radio" name="gallery" value={g.id} defaultChecked={(party?.gallery ?? "grade") === g.id} className="peer sr-only" />
+              <span className="block rounded-xl border border-zinc-200 bg-white px-3 py-2 peer-checked:border-pink-500 peer-checked:bg-pink-50">
+                <b>{g.emoji} {g.label}</b>
+                <span className="block text-xs text-zinc-500">{g.description}</span>
+              </span>
+            </label>
+          ))}
+        </div>
+      </div>
 
       <div>
         <label className="label">Cor de destaque (botões, idade, balão)</label>

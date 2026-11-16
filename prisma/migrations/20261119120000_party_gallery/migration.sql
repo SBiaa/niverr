@@ -1,0 +1,1 @@
+ALTER TABLE "Party" ADD COLUMN "gallery" TEXT NOT NULL DEFAULT 'grade';

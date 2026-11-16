@@ -8,6 +8,7 @@ import { parseLocal } from "@/lib/format";
 import { saveImage, removeImage } from "@/lib/storage";
 import { ensureSlug } from "@/lib/slug";
 import { DESIGNS, paletteFromForm } from "@/lib/designs";
+import { GALLERIES } from "@/lib/galleries";
 
 const makeToken = customAlphabet("abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789", 10);
 
@@ -23,7 +24,9 @@ function partyFields(form: FormData) {
   const age = parseInt(String(form.get("age") || ""), 10);
   const design = String(form.get("design") || "padrao");
   const safeDesign = DESIGNS[design] ? design : "padrao";
+  const gallery = String(form.get("gallery") || "grade");
   return {
+    gallery: GALLERIES[gallery] ? gallery : "grade",
     design: safeDesign,
     palette: paletteFromForm(safeDesign, form),
     honoreeName: String(form.get("honoreeName") || "").trim(),

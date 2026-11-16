@@ -26,7 +26,9 @@ model Party {
   age          Int?
   theme        String   @default("infantil") // infantil | quinze | adulto
   color        String   @default("#ec4899")
-  date         DateTime
+  design       String   @default("padrao") // padrao | floresta | ...
+  palette      String?  // JSON com as cores trocadas pelo organizador (só o que difere do padrão)
+  date       DateTime
   endTime      String?
   venueName    String
   address      String

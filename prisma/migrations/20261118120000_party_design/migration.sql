@@ -1,0 +1,2 @@
+ALTER TABLE "Party" ADD COLUMN "design" TEXT NOT NULL DEFAULT 'padrao';
+ALTER TABLE "Party" ADD COLUMN "palette" TEXT;

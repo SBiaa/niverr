@@ -7,6 +7,7 @@ import { requireUser } from "@/lib/auth";
 import { parseLocal } from "@/lib/format";
 import { saveImage, removeImage } from "@/lib/storage";
 import { ensureSlug } from "@/lib/slug";
+import { DESIGNS, paletteFromForm } from "@/lib/designs";
 
 const makeToken = customAlphabet("abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789", 10);
 
@@ -20,7 +21,11 @@ async function ownParty(partyId: string) {
 function partyFields(form: FormData) {
   const date = String(form.get("date") || "");
   const age = parseInt(String(form.get("age") || ""), 10);
+  const design = String(form.get("design") || "padrao");
+  const safeDesign = DESIGNS[design] ? design : "padrao";
   return {
+    design: safeDesign,
+    palette: paletteFromForm(safeDesign, form),
     honoreeName: String(form.get("honoreeName") || "").trim(),
     age: Number.isFinite(age) ? age : null,
     theme: String(form.get("theme") || "infantil"),

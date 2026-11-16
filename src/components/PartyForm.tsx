@@ -1,6 +1,7 @@
 import { THEMES, toLocalInput } from "@/lib/format";
 import type { Party } from "@prisma/client";
 import SubmitButton from "./SubmitButton";
+import DesignPicker from "./DesignPicker";
 
 const COLORS = ["#ec4899", "#8b5cf6", "#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#c9a227", "#0f172a"];
 
@@ -40,8 +41,10 @@ export default function PartyForm({
         </div>
       </div>
 
+      <DesignPicker design={party?.design} palette={party?.palette} />
+
       <div>
-        <label className="label">Cor do convite</label>
+        <label className="label">Cor de destaque (botões, idade, balão)</label>
         <div className="flex flex-wrap gap-2">
           {COLORS.map((c) => (
             <label key={c} className="cursor-pointer">

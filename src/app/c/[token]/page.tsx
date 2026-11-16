@@ -1,3 +1,4 @@
+import GiftsList from "@/components/GiftsList";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
@@ -5,8 +6,6 @@ import { track } from "@/lib/track";
 import { fmtDate, fmtTime, firstName, THEMES } from "@/lib/format";
 import PartyView from "@/components/PartyView";
 import RsvpForm from "./RsvpForm";
-import { pickGift, unpickGift } from "./actions";
-import SubmitButton from "@/components/SubmitButton";
 
 async function load(token: string) {
   return db.guest.findUnique({
@@ -89,40 +88,7 @@ export default async function Convite({
         />
       }
       gifts={
-        party.gifts.length > 0 ? (
-          <>
-            <p className="mb-3 text-center text-sm text-zinc-600">Escolha um presente pra ninguém repetir (opcional).</p>
-            <ul className="space-y-2">
-              {party.gifts.map((g) => {
-                const mine = g.guestId === guest.id;
-                const taken = !!g.guestId && !mine;
-                return (
-                  <li key={g.id} className={`card flex flex-col gap-2 p-3 sm:flex-row sm:items-center sm:gap-3 ${taken ? "opacity-50" : ""}`}>
-                    <div className="min-w-0 sm:flex-1">
-                      <p className={`font-semibold ${taken ? "line-through" : ""}`}>{g.name}</p>
-                      {g.link && !taken && (
-                        <a href={g.link} target="_blank" className="text-xs text-sky-600">Ver na loja ↗</a>
-                      )}
-                    </div>
-                    {taken ? (
-                      <span className="text-xs text-zinc-500">Já escolhido</span>
-                    ) : mine ? (
-                      <form action={unpickGift.bind(null, token, g.id)}>
-                        <SubmitButton className="btn w-full whitespace-nowrap bg-emerald-50 px-3 py-2 text-sm text-emerald-700 sm:w-auto" pendingText="...">
-                          ✔ Eu vou dar · desfazer
-                        </SubmitButton>
-                      </form>
-                    ) : (
-                      <form action={pickGift.bind(null, token, g.id)}>
-                        <SubmitButton className="btn-primary w-full whitespace-nowrap px-3 py-2 text-sm sm:w-auto" pendingText="...">Eu vou dar</SubmitButton>
-                      </form>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
-          </>
-        ) : null
+        party.gifts.length > 0 ? <GiftsList gifts={party.gifts} token={token} guestId={guest.id} /> : null
       }
     />
   );

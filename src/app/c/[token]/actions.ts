@@ -21,7 +21,7 @@ export async function pickGift(token: string, giftId: string) {
   const guest = await db.guest.findUnique({ where: { token } });
   if (!guest) throw new Error("Convite inválido");
   // só reserva se ainda estiver livre
-  await db.gift.updateMany({ where: { id: giftId, partyId: guest.partyId, guestId: null }, data: { guestId: guest.id } });
+  await db.gift.updateMany({ where: { id: giftId, partyId: guest.partyId, guestId: null, kind: "item" }, data: { guestId: guest.id } });
   revalidatePath(`/c/${token}`);
 }
 

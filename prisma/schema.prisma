@@ -72,6 +72,7 @@ model Gift {
   party      Party    @relation(fields: [partyId], references: [id], onDelete: Cascade)
   name       String
   link       String?
+  kind       String   @default("item") // item = escolhível | info = sugestão/informação
   guestId    String?
   guest      Guest?   @relation(fields: [guestId], references: [id], onDelete: SetNull)
   createdAt  DateTime @default(now())

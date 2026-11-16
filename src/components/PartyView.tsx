@@ -95,7 +95,7 @@ export default function PartyView({
 
         {gifts && (
           <section className="mt-8">
-            <h2 className={`${theme.font} text-center text-2xl font-bold`}>🎁 Lista de presentes</h2>
+            <h2 className={`${theme.font} text-center text-2xl font-bold`}>🎁 Presentes</h2>
             {gifts}
           </section>
         )}

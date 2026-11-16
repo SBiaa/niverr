@@ -149,7 +149,22 @@ export async function addGift(partyId: string, form: FormData) {
   const name = String(form.get("name") || "").trim();
   if (!name) return;
   const link = String(form.get("link") || "").trim();
-  await db.gift.create({ data: { partyId, name, link: link || null } });
+  const kind = form.get("kind") === "info" ? "info" : "item";
+  await db.gift.create({ data: { partyId, name, link: link || null, kind } });
+  revalidatePath(`/painel/festa/${partyId}`);
+}
+
+export async function updateGift(partyId: string, giftId: string, form: FormData) {
+  await ownParty(partyId);
+  const name = String(form.get("name") || "").trim();
+  if (!name) return;
+  const link = String(form.get("link") || "").trim() || null;
+  const kind = form.get("kind") === "info" ? "info" : "item";
+  // sugestão não tem "quem vai dar"
+  await db.gift.update({
+    where: { id: giftId, partyId },
+    data: { name, link, kind, ...(kind === "info" ? { guestId: null } : {}) },
+  });
   revalidatePath(`/painel/festa/${partyId}`);
 }
 

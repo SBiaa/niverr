@@ -1,3 +1,4 @@
+import GiftsList from "@/components/GiftsList";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
@@ -42,21 +43,7 @@ export default async function FestaPublica({ params }: { params: Promise<{ slug:
       }
       rsvp={<OpenRsvpForm slug={slug} />}
       gifts={
-        party.gifts.length > 0 ? (
-          <>
-            <p className="mb-3 text-center text-sm text-zinc-600">
-              Depois de confirmar presença, você pode escolher um presente pra ninguém repetir.
-            </p>
-            <ul className="space-y-2">
-              {party.gifts.map((g) => (
-                <li key={g.id} className={`card flex items-center gap-3 p-3 ${g.guestId ? "opacity-50" : ""}`}>
-                  <p className={`flex-1 font-semibold ${g.guestId ? "line-through" : ""}`}>{g.name}</p>
-                  <span className="shrink-0 text-xs text-zinc-500">{g.guestId ? "Já escolhido" : "Disponível"}</span>
-                </li>
-              ))}
-            </ul>
-          </>
-        ) : null
+        party.gifts.length > 0 ? <GiftsList gifts={party.gifts} /> : null
       }
     />
   );

@@ -1,0 +1,1 @@
+ALTER TABLE "Gift" ADD COLUMN "kind" TEXT NOT NULL DEFAULT 'item';

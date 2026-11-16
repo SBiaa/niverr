@@ -35,11 +35,11 @@ export default function PartyView({
             <img
               src={party.coverUrl}
               alt={party.honoreeName}
-              className="mx-auto mt-6 h-56 w-56 rounded-full border-8 border-white object-cover shadow-xl"
+              className="mx-auto mt-6 h-48 w-48 rounded-full sm:h-56 sm:w-56 border-8 border-white object-cover shadow-xl"
             />
           )}
 
-          <h1 className={`${theme.font} mt-5 text-5xl font-bold leading-tight sm:text-6xl`} style={{ color: party.color }}>
+          <h1 className={`${theme.font} mt-5 break-words text-5xl font-bold leading-tight sm:text-6xl`} style={{ color: party.color }}>
             {party.honoreeName}
           </h1>
           {party.age != null && (

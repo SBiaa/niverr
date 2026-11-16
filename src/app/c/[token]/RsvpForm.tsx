@@ -57,7 +57,7 @@ export default function RsvpForm({
         <button
           type="button"
           onClick={() => setChoice("yes")}
-          className={`rounded-2xl border-2 p-4 text-lg font-bold transition ${
+          className={`rounded-2xl border-2 p-3 text-base font-bold transition sm:p-4 sm:text-lg ${
             choice === "yes" ? "border-emerald-500 bg-emerald-50 text-emerald-700" : "border-zinc-200 bg-white"
           }`}
         >
@@ -66,7 +66,7 @@ export default function RsvpForm({
         <button
           type="button"
           onClick={() => setChoice("no")}
-          className={`rounded-2xl border-2 p-4 text-lg font-bold transition ${
+          className={`rounded-2xl border-2 p-3 text-base font-bold transition sm:p-4 sm:text-lg ${
             choice === "no" ? "border-red-400 bg-red-50 text-red-600" : "border-zinc-200 bg-white"
           }`}
         >

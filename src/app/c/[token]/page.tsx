@@ -97,8 +97,8 @@ export default async function Convite({
                 const mine = g.guestId === guest.id;
                 const taken = !!g.guestId && !mine;
                 return (
-                  <li key={g.id} className={`card flex items-center gap-3 p-3 ${taken ? "opacity-50" : ""}`}>
-                    <div className="min-w-0 flex-1">
+                  <li key={g.id} className={`card flex flex-col gap-2 p-3 sm:flex-row sm:items-center sm:gap-3 ${taken ? "opacity-50" : ""}`}>
+                    <div className="min-w-0 sm:flex-1">
                       <p className={`font-semibold ${taken ? "line-through" : ""}`}>{g.name}</p>
                       {g.link && !taken && (
                         <a href={g.link} target="_blank" className="text-xs text-sky-600">Ver na loja ↗</a>
@@ -108,13 +108,13 @@ export default async function Convite({
                       <span className="text-xs text-zinc-500">Já escolhido</span>
                     ) : mine ? (
                       <form action={unpickGift.bind(null, token, g.id)}>
-                        <SubmitButton className="btn bg-emerald-50 px-3 py-1.5 text-sm text-emerald-700" pendingText="...">
+                        <SubmitButton className="btn w-full whitespace-nowrap bg-emerald-50 px-3 py-2 text-sm text-emerald-700 sm:w-auto" pendingText="...">
                           ✔ Eu vou dar · desfazer
                         </SubmitButton>
                       </form>
                     ) : (
                       <form action={pickGift.bind(null, token, g.id)}>
-                        <SubmitButton className="btn-primary px-3 py-1.5 text-sm" pendingText="...">Eu vou dar</SubmitButton>
+                        <SubmitButton className="btn-primary w-full whitespace-nowrap px-3 py-2 text-sm sm:w-auto" pendingText="...">Eu vou dar</SubmitButton>
                       </form>
                     )}
                   </li>

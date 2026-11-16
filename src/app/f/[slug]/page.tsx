@@ -51,7 +51,7 @@ export default async function FestaPublica({ params }: { params: Promise<{ slug:
               {party.gifts.map((g) => (
                 <li key={g.id} className={`card flex items-center gap-3 p-3 ${g.guestId ? "opacity-50" : ""}`}>
                   <p className={`flex-1 font-semibold ${g.guestId ? "line-through" : ""}`}>{g.name}</p>
-                  <span className="text-xs text-zinc-500">{g.guestId ? "Já escolhido" : "Disponível"}</span>
+                  <span className="shrink-0 text-xs text-zinc-500">{g.guestId ? "Já escolhido" : "Disponível"}</span>
                 </li>
               ))}
             </ul>

@@ -12,8 +12,9 @@ export async function saveImage(file: File, folder: string) {
   const name = `${folder}/${nanoid(12)}.${ext}`;
 
   if (process.env.BLOB_READ_WRITE_TOKEN) {
-    const blob = await put(name, file, { access: "public" });
-    return blob.url;
+    // o store é privado: as imagens são servidas pela rota /img/[...path]
+    const blob = await put(name, file, { access: "private", contentType: file.type });
+    return `/img/${blob.pathname}`;
   }
   // desenvolvimento local: salva em public/uploads
   const dir = path.join(process.cwd(), "public", "uploads", folder);
@@ -25,6 +26,7 @@ export async function saveImage(file: File, folder: string) {
 export async function removeImage(url: string) {
   try {
     if (url.startsWith("/uploads/")) await unlink(path.join(process.cwd(), "public", url));
+    else if (url.startsWith("/img/") && process.env.BLOB_READ_WRITE_TOKEN) await del(url.slice("/img/".length));
     else if (process.env.BLOB_READ_WRITE_TOKEN) await del(url);
   } catch {
     /* ignore */

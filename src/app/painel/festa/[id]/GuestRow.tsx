@@ -73,6 +73,7 @@ export default function GuestRow({
           {guest.phone || "sem telefone"}
           {guest.sentAt && " · 📤 enviado"}
           {guest.openedAt && " · 👀 abriu"}
+          {guest.selfRegistered && " · 🔗 confirmou pelo link da festa"}
         </p>
         {guest.note && <p className="mt-1 text-sm italic text-zinc-600">“{guest.note}”</p>}
       </div>

@@ -10,6 +10,8 @@ import GiftsTab from "./GiftsTab";
 import PartyForm from "@/components/PartyForm";
 import SubmitButton from "@/components/SubmitButton";
 import { updateParty, deleteParty } from "../../actions";
+import { ensureSlug } from "@/lib/slug";
+import PublicLink from "./PublicLink";
 
 const TABS = [
   ["convidados", "👥 Convidados"],
@@ -38,6 +40,7 @@ export default async function FestaPage({
   });
   if (!party) notFound();
   const base = await baseUrl();
+  const slug = await ensureSlug(party);
 
   return (
     <div>
@@ -57,6 +60,8 @@ export default async function FestaPage({
           </a>
         )}
       </div>
+
+      <PublicLink url={`${base}/f/${slug}`} honoree={party.honoreeName} />
 
       <nav className="mt-5 flex gap-1 overflow-x-auto border-b border-zinc-200">
         {TABS.map(([k, label]) => (

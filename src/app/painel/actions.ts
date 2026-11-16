@@ -6,6 +6,7 @@ import { db } from "@/lib/db";
 import { requireUser } from "@/lib/auth";
 import { parseLocal } from "@/lib/format";
 import { saveImage, removeImage } from "@/lib/storage";
+import { ensureSlug } from "@/lib/slug";
 
 const makeToken = customAlphabet("abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789", 10);
 
@@ -38,6 +39,7 @@ export async function createParty(form: FormData) {
   if (!data.honoreeName || !data.venueName || !data.address || isNaN(data.date.getTime()))
     throw new Error("Preencha os campos obrigatórios");
   const party = await db.party.create({ data: { ...data, ownerId: user.id } });
+  await ensureSlug(party);
   redirect(`/painel/festa/${party.id}`);
 }
 

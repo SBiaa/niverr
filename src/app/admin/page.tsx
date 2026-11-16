@@ -10,6 +10,7 @@ const KIND: Record<string, string> = {
   login: "🔑 Login",
   signup: "🆕 Cadastro",
   page: "📄 Visita",
+  party: "🌐 Página da festa",
 };
 
 const TABS = [

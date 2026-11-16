@@ -21,6 +21,7 @@ model Party {
   id           String   @id @default(cuid())
   ownerId      String
   owner        User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  slug         String?  @unique
   honoreeName  String
   age          Int?
   theme        String   @default("infantil") // infantil | quinze | adulto
@@ -46,6 +47,7 @@ model Guest {
   name        String
   phone       String?
   token       String    @unique
+  selfRegistered Boolean @default(false)
   status      String    @default("pending") // pending | yes | no
   companions  Int       @default(0)
   note        String?

@@ -13,7 +13,9 @@ export default async function PainelLayout({ children }: { children: React.React
             {isSuperAdmin(user.email) && (
               <Link href="/admin" className="font-semibold text-violet-700">Admin</Link>
             )}
-            <span className="hidden text-zinc-500 sm:inline">{user.name}</span>
+            <Link href="/painel/conta" className="text-zinc-600 hover:text-zinc-900">
+              <span className="hidden sm:inline">{user.name} · </span>Minha conta
+            </Link>
             <form action={logout}>
               <button className="text-zinc-500 hover:text-zinc-900">Sair</button>
             </form>

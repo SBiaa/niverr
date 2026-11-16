@@ -11,11 +11,13 @@ export type DesignDef = {
   emoji: string;
   description: string;
   /** qual cena SVG desenha o topo do convite (nenhuma = visual clássico) */
-  scene?: "forest" | "sea";
+  scene?: "forest" | "sea" | "farm";
   /** tom do texto que aparece direto sobre a cor `pageKey` (fundo da página) */
   pageKey?: string;
   /** cor do nome da festa e sombra */
   titleShadowKey?: string;
+  /** se definido, o nome usa esta cor com contorno claro (para céus claros) */
+  titleColorKey?: string;
   palette: Record<string, string>;
   fields: PaletteField[];
 };
@@ -30,6 +32,25 @@ export const MAR_PALETTE = {
   coral1: "#FFD25E",
   coral2: "#FF6F61",
   coral3: "#B28CFF",
+};
+
+export const FAZENDA_PALETTE = {
+  skyTop: "#6EC1F2",
+  skyMid: "#BDE7FF",
+  skyBottom: "#FFF1C2",
+  sun: "#FFE066",
+  sunGlow: "#FFF3B0",
+  cloud: "#FFFFFF",
+  hillFar: "#CDEB9F",
+  hillMid: "#9BD474",
+  furrow: "#86C463",
+  field: "#62AC4B",
+  barn: "#D6392E",
+  barnRoof: "#8E1F17",
+  leaves: "#3F8F3A",
+  fence: "#A9703A",
+  fenceRail: "#C48A4A",
+  soil: "#3B2418",
 };
 
 export const FLORESTA_PALETTE = {
@@ -95,6 +116,33 @@ DESIGNS.mar = {
     { key: "coral1", label: "Coral 1" },
     { key: "coral2", label: "Coral 2" },
     { key: "coral3", label: "Coral 3" },
+  ],
+};
+
+DESIGNS.fazenda = {
+  id: "fazenda",
+  label: "Fazendinha",
+  emoji: "🚜",
+  description: "Dia de sol na roça: celeiro vermelho, colinas, cerca e nuvens.",
+  scene: "farm",
+  pageKey: "soil",
+  titleColorKey: "barn",
+  palette: FAZENDA_PALETTE,
+  fields: [
+    { key: "skyTop", label: "Céu (topo)" },
+    { key: "skyMid", label: "Céu (meio)" },
+    { key: "skyBottom", label: "Céu (horizonte)" },
+    { key: "sun", label: "Sol" },
+    { key: "sunGlow", label: "Brilho e raios do sol" },
+    { key: "cloud", label: "Nuvens" },
+    { key: "hillFar", label: "Colina ao fundo" },
+    { key: "hillMid", label: "Colina do meio" },
+    { key: "field", label: "Pasto da frente" },
+    { key: "barn", label: "Celeiro e nome" },
+    { key: "barnRoof", label: "Telhado do celeiro" },
+    { key: "leaves", label: "Árvore" },
+    { key: "fence", label: "Cerca (postes)" },
+    { key: "soil", label: "Terra e fundo da página" },
   ],
 };
 

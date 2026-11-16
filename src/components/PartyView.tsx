@@ -52,7 +52,16 @@ export default function PartyView({
             )}
             <h1
               className="mt-5 break-words text-5xl font-extrabold leading-tight text-white sm:text-6xl"
-              style={{ textShadow: `0 4px 0 ${pal[def.titleShadowKey!]}, 0 10px 28px rgba(0,0,0,.3)` }}
+              style={
+                def.titleColorKey
+                  ? {
+                      color: pal[def.titleColorKey],
+                      WebkitTextStroke: "3px #FFF8E7",
+                      paintOrder: "stroke fill",
+                      textShadow: "0 5px 14px rgba(59,36,24,.25)",
+                    }
+                  : { textShadow: `0 4px 0 ${pal[def.titleShadowKey!]}, 0 10px 28px rgba(0,0,0,.3)` }
+              }
             >
               {party.honoreeName}
             </h1>

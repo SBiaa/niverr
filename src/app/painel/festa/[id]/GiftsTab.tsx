@@ -23,11 +23,11 @@ export default function GiftsTab({
       ) : (
         <ul className="space-y-2">
           {gifts.map((g) => (
-            <li key={g.id} className="card flex items-center gap-3 p-3">
-              <div className="min-w-0 flex-1">
+            <li key={g.id} className="card flex flex-wrap items-center gap-x-3 gap-y-2 p-3">
+              <div className="min-w-0 basis-full sm:basis-0 sm:flex-1">
                 <p className="font-semibold">🎁 {g.name}</p>
                 {g.link && (
-                  <a href={g.link} target="_blank" className="truncate text-xs text-sky-600">{g.link}</a>
+                  <a href={g.link} target="_blank" className="block truncate text-xs text-sky-600">{g.link}</a>
                 )}
               </div>
               {g.guest ? (
@@ -39,11 +39,11 @@ export default function GiftsTab({
               )}
               {g.guest && (
                 <form action={releaseGift.bind(null, partyId, g.id)}>
-                  <button className="text-xs text-zinc-500">Liberar</button>
+                  <button className="px-2 py-2 text-sm text-zinc-500">Liberar</button>
                 </form>
               )}
-              <form action={deleteGift.bind(null, partyId, g.id)}>
-                <button className="text-xs text-red-600">Excluir</button>
+              <form action={deleteGift.bind(null, partyId, g.id)} className="ml-auto sm:ml-0">
+                <button className="px-2 py-2 text-sm text-red-600">Excluir</button>
               </form>
             </li>
           ))}

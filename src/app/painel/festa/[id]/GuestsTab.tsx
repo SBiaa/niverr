@@ -27,8 +27,8 @@ export default function GuestsTab({ party, guests, base }: { party: Party; guest
           ["Vão", yes.length, "text-emerald-600"],
           ["Não vão", no.length, "text-red-500"],
           ["Total de pessoas", people, "text-pink-600"],
-        ].map(([l, v, c]) => (
-          <div key={l as string} className="card p-4">
+        ].map(([l, v, c], i) => (
+          <div key={l as string} className={`card p-4 ${i === 4 ? "col-span-2 sm:col-span-1" : ""}`}>
             <p className="text-xs font-semibold uppercase text-zinc-500">{l}</p>
             <p className={`text-2xl font-bold ${c}`}>{v}</p>
           </div>

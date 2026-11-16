@@ -13,9 +13,9 @@ export default async function Painel() {
 
   return (
     <div>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-3">
         <h1 className="text-2xl font-bold">Minhas festas</h1>
-        <Link href="/painel/nova" className="btn-primary">+ Nova festa</Link>
+        <Link href="/painel/nova" className="btn-primary whitespace-nowrap">+ Nova festa</Link>
       </div>
 
       {parties.length === 0 ? (

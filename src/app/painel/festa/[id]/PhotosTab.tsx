@@ -22,14 +22,14 @@ export default function PhotosTab({ party, photos }: { party: Party; photos: Pho
               <div key={p.id} className="overflow-hidden rounded-xl border border-zinc-100 bg-white">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={p.url} alt="" className="aspect-square w-full object-cover" />
-                <div className="flex justify-between p-2 text-xs">
+                <div className="flex items-center justify-between px-1 text-sm">
                   <form action={setCover.bind(null, party.id, isCover ? null : p.url)}>
-                    <button className={isCover ? "font-bold text-amber-600" : "text-zinc-600"}>
-                      {isCover ? "⭐ Capa" : "☆ Usar como capa"}
+                    <button className={`px-2 py-2 ${isCover ? "font-bold text-amber-600" : "text-zinc-600"}`}>
+                      {isCover ? "⭐ Capa" : "☆ Capa"}
                     </button>
                   </form>
                   <form action={deletePhoto.bind(null, party.id, p.id)}>
-                    <button className="text-red-600">Excluir</button>
+                    <button className="px-2 py-2 text-red-600">Excluir</button>
                   </form>
                 </div>
               </div>

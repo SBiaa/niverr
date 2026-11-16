@@ -61,8 +61,8 @@ export default function GuestRow({
     );
 
   return (
-    <li className="card flex flex-wrap items-center gap-3 p-3">
-      <div className="min-w-0 flex-1">
+    <li className="card grid grid-cols-[1fr_auto] items-center gap-x-2 gap-y-3 p-3 sm:flex sm:gap-3">
+      <div className="min-w-0 sm:flex-1">
         <p className="font-semibold">
           {guest.name}
           {guest.status === "yes" && guest.companions > 0 && (
@@ -77,7 +77,7 @@ export default function GuestRow({
         </p>
         {guest.note && <p className="mt-1 text-sm italic text-zinc-600">“{guest.note}”</p>}
       </div>
-      <span className={`rounded-full px-3 py-1 text-xs font-semibold ${cls}`}>{label}</span>
+      <span className={`self-start whitespace-nowrap rounded-full px-3 py-1 text-xs font-semibold sm:self-auto ${cls}`}>{label}</span>
       {phone ? (
         <button onClick={send} className="btn-wa px-4 py-2 text-sm">
           {guest.sentAt ? "Reenviar" : "Enviar convite"}
@@ -87,8 +87,8 @@ export default function GuestRow({
           {copied ? "Copiado! ✔" : "Copiar convite"}
         </button>
       )}
-      <div className="relative">
-        <button onClick={() => setMenu(!menu)} className="rounded-full px-2 py-1 text-xl text-zinc-500 hover:bg-zinc-100" aria-label="Mais opções">⋯</button>
+      <div className="relative justify-self-end">
+        <button onClick={() => setMenu(!menu)} className="rounded-full px-3 py-1 text-xl text-zinc-500 hover:bg-zinc-100" aria-label="Mais opções">⋯</button>
         {menu && (
           <div className="absolute right-0 z-20 mt-1 w-56 rounded-xl border border-zinc-100 bg-white p-1 text-sm shadow-lg" onMouseLeave={() => setMenu(false)}>
             {[

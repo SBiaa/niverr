@@ -10,8 +10,26 @@ export type DesignDef = {
   label: string;
   emoji: string;
   description: string;
+  /** qual cena SVG desenha o topo do convite (nenhuma = visual clássico) */
+  scene?: "forest" | "sea";
+  /** tom do texto que aparece direto sobre a cor `pageKey` (fundo da página) */
+  pageKey?: string;
+  /** cor do nome da festa e sombra */
+  titleShadowKey?: string;
   palette: Record<string, string>;
   fields: PaletteField[];
+};
+
+export const MAR_PALETTE = {
+  waterTop: "#8FE9F0",
+  waterUpper: "#3BB8DA",
+  waterMid: "#1676B0",
+  waterDeep: "#0E4C82",
+  seabed: "#0B3558",
+  rays: "#FFFFFF",
+  coral1: "#FFD25E",
+  coral2: "#FF6F61",
+  coral3: "#B28CFF",
 };
 
 export const FLORESTA_PALETTE = {
@@ -40,6 +58,9 @@ export const DESIGNS: Record<string, DesignDef> = {
     label: "Floresta encantada",
     emoji: "🌲",
     description: "Céu de entardecer, florestas em camadas e vaga-lumes.",
+    scene: "forest",
+    pageKey: "ground",
+    titleShadowKey: "treesMid",
     palette: FLORESTA_PALETTE,
     fields: [
       { key: "skyTop", label: "Céu (topo)" },
@@ -53,6 +74,28 @@ export const DESIGNS: Record<string, DesignDef> = {
       { key: "glow", label: "Vaga-lumes" },
     ],
   },
+};
+
+DESIGNS.mar = {
+  id: "mar",
+  label: "Recife de coral",
+  emoji: "🐠",
+  description: "Mergulho no recife: água, raios de sol, peixes, bolhas e corais.",
+  scene: "sea",
+  pageKey: "seabed",
+  titleShadowKey: "waterMid",
+  palette: MAR_PALETTE,
+  fields: [
+    { key: "waterTop", label: "Água (superfície)" },
+    { key: "waterUpper", label: "Água (rasa)" },
+    { key: "waterMid", label: "Água (meio)" },
+    { key: "waterDeep", label: "Água (funda)" },
+    { key: "seabed", label: "Fundo do mar e da página" },
+    { key: "rays", label: "Raios de luz, bolhas e peixes" },
+    { key: "coral1", label: "Coral 1" },
+    { key: "coral2", label: "Coral 2" },
+    { key: "coral3", label: "Coral 3" },
+  ],
 };
 
 const HEX = /^#[0-9a-fA-F]{6}$/;

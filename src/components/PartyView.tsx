@@ -3,8 +3,8 @@ import type { Party, Photo } from "@prisma/client";
 import { fmtDate, fmtTime, THEMES } from "@/lib/format";
 import MapButton from "@/app/c/[token]/MapButton";
 import Countdown from "@/app/c/[token]/Countdown";
-import ForestScene from "@/components/ForestScene";
-import { isDark, resolvePalette } from "@/lib/designs";
+import DesignScene from "@/components/DesignScene";
+import { DESIGNS, isDark, resolvePalette } from "@/lib/designs";
 
 /** Layout comum do convite pessoal (/c/[token]) e da página pública (/f/[slug]). */
 export default function PartyView({
@@ -24,20 +24,22 @@ export default function PartyView({
 }) {
   const theme = THEMES[party.theme] ?? THEMES.infantil;
   const past = party.date.getTime() < Date.now() - 12 * 3600 * 1000;
-  const forest = party.design === "floresta";
+  const def = DESIGNS[party.design];
+  const forest = !!def?.scene; // tema com cena própria
   const pal = resolvePalette(party.design, party.palette);
-  const onDark = forest && isDark(pal.ground);
+  const pageBg = forest ? pal[def.pageKey!] : "";
+  const onDark = forest && isDark(pageBg);
   const headTone = onDark ? "text-white" : "";
 
   return (
     <main
       className={`${forest ? "" : theme.bg} min-h-screen pb-16`}
-      style={{ ["--accent" as string]: party.color, ...(forest ? { background: pal.ground } : {}) }}
+      style={{ ["--accent" as string]: party.color, ...(forest ? { background: pageBg } : {}) }}
     >
       {banner}
       {forest && (
         <div className="relative isolate overflow-hidden">
-          <ForestScene palette={pal} className="absolute inset-0 -z-10 h-full w-full" />
+          <DesignScene design={party.design} palette={pal} className="absolute inset-0 -z-10 h-full w-full" />
           <div className="mx-auto max-w-lg px-4 pb-56 pt-8 text-center">
             <div className="mx-auto inline-block rounded-2xl bg-white/80 px-4 py-2 backdrop-blur">{greeting}</div>
             {party.coverUrl && (
@@ -50,7 +52,7 @@ export default function PartyView({
             )}
             <h1
               className="mt-5 break-words text-5xl font-extrabold leading-tight text-white sm:text-6xl"
-              style={{ textShadow: `0 4px 0 ${pal.treesMid}, 0 10px 28px rgba(0,0,0,.3)` }}
+              style={{ textShadow: `0 4px 0 ${pal[def.titleShadowKey!]}, 0 10px 28px rgba(0,0,0,.3)` }}
             >
               {party.honoreeName}
             </h1>

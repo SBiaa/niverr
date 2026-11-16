@@ -1,5 +1,5 @@
 import type { Party, Photo } from "@prisma/client";
-import { setCover, deletePhoto } from "../../actions";
+import { setCover, deletePhoto, setCaption } from "../../actions";
 import PhotoUploadForm from "./PhotoUploadForm";
 
 export default function PhotosTab({ party, photos }: { party: Party; photos: Photo[] }) {
@@ -17,6 +17,19 @@ export default function PhotosTab({ party, photos }: { party: Party; photos: Pho
               <div key={p.id} className="overflow-hidden rounded-xl border border-zinc-100 bg-white">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={p.url} alt="" className="aspect-square w-full object-cover" />
+                <form action={setCaption.bind(null, party.id, p.id)} className="flex gap-1 px-2 pt-2">
+                  <input
+                    name="caption"
+                    defaultValue={p.caption ?? ""}
+                    maxLength={80}
+                    placeholder="Legenda"
+                    aria-label="Legenda da foto"
+                    className="min-w-0 flex-1 rounded-lg border border-zinc-200 px-2 py-1 text-sm"
+                  />
+                  <button className="rounded-lg bg-zinc-100 px-2 text-sm font-semibold text-zinc-700" title="Salvar legenda">
+                    OK
+                  </button>
+                </form>
                 <div className="flex items-center justify-between px-1 text-sm">
                   <form action={setCover.bind(null, party.id, isCover ? null : p.url)}>
                     <button className={`px-2 py-2 ${isCover ? "font-bold text-amber-600" : "text-zinc-600"}`}>

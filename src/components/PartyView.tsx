@@ -140,7 +140,9 @@ export default function PartyView({
         {photos.length > 0 && (
           <section className="mt-8">
             <h2 className={`${theme.font} ${headTone} mb-3 text-center text-2xl font-bold`}>📸 Fotos</h2>
-            <Gallery photos={photos} style={party.gallery} />
+            <div className={headTone}>
+              <Gallery photos={photos} style={party.gallery} />
+            </div>
           </section>
         )}
 

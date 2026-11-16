@@ -143,6 +143,13 @@ export async function setCover(partyId: string, url: string | null) {
   revalidatePath(`/painel/festa/${partyId}`);
 }
 
+export async function setCaption(partyId: string, photoId: string, form: FormData) {
+  await ownParty(partyId);
+  const caption = String(form.get("caption") || "").trim().slice(0, 80) || null;
+  await db.photo.update({ where: { id: photoId, partyId }, data: { caption } });
+  revalidatePath(`/painel/festa/${partyId}`);
+}
+
 export async function deletePhoto(partyId: string, photoId: string) {
   const party = await ownParty(partyId);
   const photo = await db.photo.delete({ where: { id: photoId, partyId } });

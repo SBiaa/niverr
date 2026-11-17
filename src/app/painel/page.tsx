@@ -35,9 +35,9 @@ export default async function Painel() {
                   className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-xl text-3xl"
                   style={{ background: p.color + "22" }}
                 >
-                  {p.coverUrl ? (
+                  {(p.profileUrl ?? p.coverUrl) ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={p.coverUrl} alt="" className="h-full w-full object-cover" />
+                    <img src={(p.profileUrl ?? p.coverUrl)!} alt="" className="h-full w-full object-cover" />
                   ) : (
                     THEMES[p.theme]?.emoji
                   )}

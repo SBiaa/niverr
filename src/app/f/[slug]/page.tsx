@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!p) return { title: "Festa" };
   const title = `Aniversário ${p.age ? `de ${p.age} anos ` : ""}de ${p.honoreeName} 🎉`;
   const description = `${fmtDate(p.date)} às ${fmtTime(p.date)} · ${p.venueName}. Confirme sua presença!`;
-  return { title, description, openGraph: { title, description, images: p.coverUrl ? [p.coverUrl] : [] } };
+  return { title, description, openGraph: { title, description, images: (p.profileUrl ?? p.coverUrl) ? [(p.profileUrl ?? p.coverUrl)!] : [] } };
 }
 
 export default async function FestaPublica({ params }: { params: Promise<{ slug: string }> }) {

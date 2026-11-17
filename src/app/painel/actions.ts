@@ -27,7 +27,6 @@ function partyFields(form: FormData) {
   const gallery = String(form.get("gallery") || "grade");
   return {
     gallery: GALLERIES[gallery] ? gallery : "grade",
-    coverStyle: form.get("coverStyle") === "fundo" ? "fundo" : "redonda",
     design: safeDesign,
     palette: paletteFromForm(safeDesign, form),
     honoreeName: String(form.get("honoreeName") || "").trim(),
@@ -54,14 +53,16 @@ export async function createParty(form: FormData) {
 
 export async function updateParty(partyId: string, form: FormData) {
   await ownParty(partyId);
-  // a capa só muda se o formulário trouxe o campo e a foto é mesmo desta festa
-  let cover: { coverUrl: string | null } | undefined;
-  if (form.has("coverUrl")) {
-    const url = String(form.get("coverUrl") || "");
-    if (!url) cover = { coverUrl: null };
-    else if (await db.photo.findFirst({ where: { partyId, url } })) cover = { coverUrl: url };
+  // capa (fundo) e foto do aniversariante só mudam se o formulário trouxe o campo
+  // e a foto é mesmo desta festa
+  const photos: { coverUrl?: string | null; profileUrl?: string | null } = {};
+  for (const key of ["coverUrl", "profileUrl"] as const) {
+    if (!form.has(key)) continue;
+    const url = String(form.get(key) || "");
+    if (!url) photos[key] = null;
+    else if (await db.photo.findFirst({ where: { partyId, url } })) photos[key] = url;
   }
-  await db.party.update({ where: { id: partyId }, data: { ...partyFields(form), ...cover } });
+  await db.party.update({ where: { id: partyId }, data: { ...partyFields(form), ...photos } });
   revalidatePath(`/painel/festa/${partyId}`);
 }
 
@@ -145,12 +146,6 @@ export async function uploadPhoto(partyId: string, form: FormData): Promise<{ er
   return {};
 }
 
-export async function setCover(partyId: string, url: string | null) {
-  await ownParty(partyId);
-  await db.party.update({ where: { id: partyId }, data: { coverUrl: url } });
-  revalidatePath(`/painel/festa/${partyId}`);
-}
-
 export async function setCaption(partyId: string, photoId: string, form: FormData) {
   await ownParty(partyId);
   const caption = String(form.get("caption") || "").trim().slice(0, 80) || null;
@@ -162,6 +157,7 @@ export async function deletePhoto(partyId: string, photoId: string) {
   const party = await ownParty(partyId);
   const photo = await db.photo.delete({ where: { id: photoId, partyId } });
   if (party.coverUrl === photo.url) await db.party.update({ where: { id: partyId }, data: { coverUrl: null } });
+  if (party.profileUrl === photo.url) await db.party.update({ where: { id: partyId }, data: { profileUrl: null } });
   await removeImage(photo.url);
   revalidatePath(`/painel/festa/${partyId}`);
 }

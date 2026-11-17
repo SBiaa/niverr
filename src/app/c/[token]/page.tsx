@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: { params: Promise<{ token: st
   const p = g.party;
   const title = `${firstName(g.name)}, você está convidado(a)! 🎉`;
   const description = `Aniversário ${p.age ? `de ${p.age} anos ` : ""}de ${p.honoreeName} · ${fmtDate(p.date)} às ${fmtTime(p.date)}`;
-  return { title, description, openGraph: { title, description, images: p.coverUrl ? [p.coverUrl] : [] } };
+  return { title, description, openGraph: { title, description, images: (p.profileUrl ?? p.coverUrl) ? [(p.profileUrl ?? p.coverUrl)!] : [] } };
 }
 
 export default async function Convite({

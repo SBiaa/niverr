@@ -33,7 +33,7 @@ export default function PartyView({
   const pageBg = forest ? pal[def.pageKey!] : customBg ? pal.pageBg : "";
   const onDark = !!pageBg && isDark(pageBg);
   const headTone = onDark ? "text-white" : "";
-  const coverBg = !forest && party.coverStyle === "fundo" && !!party.coverUrl;
+  const coverBg = !forest && !!party.coverUrl;
 
   return (
     <main
@@ -46,10 +46,10 @@ export default function PartyView({
           <DesignScene design={party.design} palette={pal} className="absolute inset-0 -z-10 h-full w-full" />
           <div className="mx-auto max-w-lg px-4 pb-56 pt-8 text-center">
             <div className="mx-auto inline-block rounded-2xl bg-white/80 px-4 py-2 backdrop-blur">{greeting}</div>
-            {party.coverUrl && (
+            {party.profileUrl && (
               // eslint-disable-next-line @next/next/no-img-element
               <img
-                src={party.coverUrl}
+                src={party.profileUrl}
                 alt={party.honoreeName}
                 className="mx-auto mt-6 h-44 w-44 rounded-full border-8 border-white/90 object-cover shadow-xl sm:h-52 sm:w-52"
               />
@@ -92,6 +92,14 @@ export default function PartyView({
           <div className="absolute inset-0 -z-10" style={{ background: pal.overlay, opacity: 0.4 }} />
           <div className="mx-auto w-full max-w-lg px-4 pb-10 pt-24 text-center">
             <div className="mx-auto inline-block rounded-2xl bg-white/80 px-4 py-2 backdrop-blur">{greeting}</div>
+            {party.profileUrl && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={party.profileUrl}
+                alt={party.honoreeName}
+                className="mx-auto mt-5 h-36 w-36 rounded-full border-8 border-white/90 object-cover shadow-xl sm:h-44 sm:w-44"
+              />
+            )}
             <h1
               className={`${theme.font} mt-4 break-words text-5xl font-bold leading-tight sm:text-6xl`}
               style={{ color: pal.titleText, textShadow: "0 3px 16px rgba(0,0,0,.45)" }}
@@ -118,10 +126,10 @@ export default function PartyView({
         <section className="pt-8 text-center">
           {onDark ? <div className="mx-auto inline-block rounded-2xl bg-white/80 px-4 py-2">{greeting}</div> : greeting}
 
-          {party.coverUrl && (
+          {party.profileUrl && (
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              src={party.coverUrl}
+              src={party.profileUrl}
               alt={party.honoreeName}
               className="mx-auto mt-6 h-48 w-48 rounded-full sm:h-56 sm:w-56 border-8 border-white object-cover shadow-xl"
             />

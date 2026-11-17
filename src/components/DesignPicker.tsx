@@ -9,14 +9,14 @@ export default function DesignPicker({
   palette,
   photos,
   coverUrl,
-  coverStyle,
+  profileUrl,
 }: {
   design?: string;
   palette?: string | null;
   /** fotos já enviadas (só na edição) para escolher a capa */
   photos?: { id: string; url: string }[];
   coverUrl?: string | null;
-  coverStyle?: string;
+  profileUrl?: string | null;
 }) {
   const [id, setId] = useState(DESIGNS[design ?? ""] ? design! : "padrao");
   // uma paleta por tema; o que veio salvo vale para o tema salvo
@@ -24,12 +24,12 @@ export default function DesignPicker({
     Object.fromEntries(Object.keys(DESIGNS).map((k) => [k, resolvePalette(k, k === design ? palette : null)])),
   );
   const [cover, setCover] = useState(coverUrl ?? "");
-  const [style, setStyle] = useState(coverStyle === "fundo" ? "fundo" : "redonda");
+  const [profile, setProfile] = useState(profileUrl ?? "");
   const def = DESIGNS[id];
   const colors = all[id];
   const setColors = (c: Record<string, string>) => setAll((a) => ({ ...a, [id]: c }));
   const classico = id === "padrao";
-  const asBackground = classico && style === "fundo";
+  const asBackground = classico && !!cover;
   // no clássico, a cor da película e do nome só aparecem quando a capa é o fundo
   const fields = def.fields.filter((f) => !classico || asBackground || f.key === "pageBg");
 
@@ -37,8 +37,8 @@ export default function DesignPicker({
     <div>
       <label className="label">Tema do convite</label>
       <input type="hidden" name="design" value={id} />
-      <input type="hidden" name="coverStyle" value={style} />
       {photos && <input type="hidden" name="coverUrl" value={cover} />}
+      {photos && <input type="hidden" name="profileUrl" value={profile} />}
       {def.fields.map((f) => (
         <input key={f.key} type="hidden" name={`p_${f.key}`} value={colors[f.key]} />
       ))}
@@ -59,68 +59,19 @@ export default function DesignPicker({
       </div>
       <p className="mt-1 text-xs text-zinc-500">{def.description}</p>
 
-      {/* foto de capa: vale para todos os temas */}
-      <div className="mt-3 rounded-2xl border border-zinc-200 bg-white p-3">
-        <p className="text-sm font-semibold text-zinc-700">Foto de capa</p>
+      {/* fotos do convite: valem para todos os temas */}
+      <div className="mt-3 space-y-4 rounded-2xl border border-zinc-200 bg-white p-3">
         {photos ? (
           photos.length ? (
-            <div className="mt-2 flex gap-2 overflow-x-auto pb-1">
-              <button
-                type="button"
-                aria-pressed={cover === ""}
-                onClick={() => setCover("")}
-                className={`h-16 w-16 shrink-0 rounded-xl border-2 text-xs text-zinc-500 ${
-                  cover === "" ? "border-pink-500 bg-pink-50" : "border-zinc-200 bg-white"
-                }`}
-              >
-                Sem capa
-              </button>
-              {photos.map((p) => (
-                <button
-                  key={p.id}
-                  type="button"
-                  aria-pressed={cover === p.url}
-                  aria-label="Usar como capa"
-                  onClick={() => setCover(p.url)}
-                  className={`h-16 w-16 shrink-0 overflow-hidden rounded-xl border-2 ${
-                    cover === p.url ? "border-pink-500" : "border-transparent"
-                  }`}
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={p.url} alt="" className="h-full w-full object-cover" />
-                </button>
-              ))}
-            </div>
+            <>
+              {classico && <PhotoPick label="Foto de fundo (capa do topo)" photos={photos} value={cover} onChange={setCover} none="Sem fundo" />}
+              <PhotoPick label="Foto do aniversariante (redonda)" photos={photos} value={profile} onChange={setProfile} none="Sem foto" />
+            </>
           ) : (
-            <p className="mt-1 text-xs text-zinc-500">Envie fotos na aba “Fotos” e volte aqui para escolher a capa.</p>
+            <p className="text-xs text-zinc-500">Envie fotos na aba “Fotos” e volte aqui para escolher a foto de fundo e a do aniversariante.</p>
           )
         ) : (
-          <p className="mt-1 text-xs text-zinc-500">Depois de criar a festa, você escolhe a foto de capa aqui.</p>
-        )}
-
-        {classico && (
-          <div className="mt-3">
-            <p className="text-sm font-semibold text-zinc-700">Como mostrar a capa</p>
-            <div className="mt-2 grid grid-cols-2 gap-2">
-              {[
-                { v: "redonda", t: "⭕ Foto redonda", d: "Círculo acima do nome" },
-                { v: "fundo", t: "🖼️ Foto de fundo", d: "Ocupa todo o topo do convite" },
-              ].map((o) => (
-                <button
-                  key={o.v}
-                  type="button"
-                  aria-pressed={style === o.v}
-                  onClick={() => setStyle(o.v)}
-                  className={`rounded-xl border px-3 py-2 text-left ${
-                    style === o.v ? "border-pink-500 bg-pink-50" : "border-zinc-200 bg-white"
-                  }`}
-                >
-                  <b className="text-sm">{o.t}</b>
-                  <span className="block text-xs text-zinc-500">{o.d}</span>
-                </button>
-              ))}
-            </div>
-          </div>
+          <p className="text-xs text-zinc-500">Depois de criar a festa, você escolhe as fotos do convite aqui.</p>
         )}
       </div>
 
@@ -135,7 +86,7 @@ export default function DesignPicker({
               className="relative flex h-40 items-end justify-center overflow-hidden rounded-xl border border-zinc-100"
               style={{ background: colors.pageBg }}
             >
-              {asBackground && cover && (
+              {asBackground && (
                 <>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={cover} alt="" className="absolute inset-0 h-full w-full object-cover" />
@@ -144,7 +95,7 @@ export default function DesignPicker({
               )}
               <p
                 className="relative mb-4 text-3xl font-extrabold"
-                style={{ color: asBackground && cover ? colors.titleText : "#27272a" }}
+                style={{ color: asBackground ? colors.titleText : "#27272a" }}
               >
                 Nome da festa
               </p>
@@ -163,9 +114,6 @@ export default function DesignPicker({
               </label>
             ))}
           </div>
-          {asBackground && !cover && (
-            <p className="mt-2 text-xs text-amber-700">Escolha uma foto de capa acima para ver o fundo.</p>
-          )}
           <button
             type="button"
             onClick={() => setColors({ ...def.palette })}
@@ -175,6 +123,53 @@ export default function DesignPicker({
           </button>
         </div>
       )}
+    </div>
+  );
+}
+
+function PhotoPick({
+  label,
+  photos,
+  value,
+  onChange,
+  none,
+}: {
+  label: string;
+  photos: { id: string; url: string }[];
+  value: string;
+  onChange: (v: string) => void;
+  none: string;
+}) {
+  return (
+    <div>
+      <p className="text-sm font-semibold text-zinc-700">{label}</p>
+      <div className="mt-2 flex gap-2 overflow-x-auto pb-1">
+        <button
+          type="button"
+          aria-pressed={value === ""}
+          onClick={() => onChange("")}
+          className={`h-16 w-16 shrink-0 rounded-xl border-2 text-xs text-zinc-500 ${
+            value === "" ? "border-pink-500 bg-pink-50" : "border-zinc-200 bg-white"
+          }`}
+        >
+          {none}
+        </button>
+        {photos.map((p) => (
+          <button
+            key={p.id}
+            type="button"
+            aria-pressed={value === p.url}
+            aria-label={label}
+            onClick={() => onChange(p.url)}
+            className={`h-16 w-16 shrink-0 overflow-hidden rounded-xl border-2 ${
+              value === p.url ? "border-pink-500" : "border-transparent"
+            }`}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={p.url} alt="" className="h-full w-full object-cover" />
+          </button>
+        ))}
+      </div>
     </div>
   );
 }

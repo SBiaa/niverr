@@ -49,7 +49,7 @@ export default function PartyForm({
         palette={party?.palette}
         photos={photos}
         coverUrl={party?.coverUrl}
-        coverStyle={party?.coverStyle}
+        profileUrl={party?.profileUrl}
       />
 
       <div>

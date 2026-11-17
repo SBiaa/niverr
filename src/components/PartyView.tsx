@@ -189,15 +189,16 @@ export default function PartyView({
   );
 }
 
-/** Foto redonda do aniversariante, no tamanho escolhido pelo organizador. */
+/** Foto do aniversariante: redonda (cortada) ou inteira, no tamanho escolhido pelo organizador. */
 function ProfileImg({ party, className }: { party: Party; className?: string }) {
+  const whole = party.profileFit === "contain";
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
       src={party.profileUrl!}
       alt={party.honoreeName}
-      className={`mx-auto rounded-full border-8 bg-white shadow-xl ${party.profileFit === "contain" ? "object-contain" : "object-cover"} ${className ?? ""}`}
-      style={{ width: party.profileSize, maxWidth: "100%", aspectRatio: "1" }}
+      className={`mx-auto border-8 shadow-xl ${whole ? "h-auto rounded-3xl" : "rounded-full object-cover"} ${className ?? ""}`}
+      style={{ width: party.profileSize, maxWidth: "100%", ...(whole ? {} : { aspectRatio: "1" }) }}
     />
   );
 }

@@ -89,14 +89,14 @@ export default function DesignPicker({
                       className="w-full accent-pink-500"
                     />
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={profile} alt="" className={`shrink-0 rounded-full bg-white ${fit ? "object-contain" : "object-cover"}`} style={{ width: size / 4, height: size / 4 }} />
+                    <img src={profile} alt="" className={`shrink-0 ${fit ? "h-auto rounded-md" : "rounded-full object-cover"}`} style={{ width: size / 4, ...(fit ? {} : { height: size / 4 }) }} />
                   </div>
                 </label>
               )}
               {profile && (
                 <label className="flex items-center gap-2 text-sm text-zinc-700">
                   <input type="checkbox" name="profileFit" value="contain" checked={fit} onChange={(e) => setFit(e.target.checked)} className="h-4 w-4" />
-                  Mostrar a foto inteira (sem cortar, ex.: para aparecer o nome escrito na foto)
+                  Mostrar a foto inteira, sem o recorte redondo (bom quando a foto tem nome ou texto escrito)
                 </label>
               )}
             </>

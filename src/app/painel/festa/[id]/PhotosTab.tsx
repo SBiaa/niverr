@@ -1,5 +1,5 @@
 import type { Party, Photo } from "@prisma/client";
-import { deletePhoto, setCaption } from "../../actions";
+import { deletePhoto, setInGallery, setCaption } from "../../actions";
 import PhotoUploadForm from "./PhotoUploadForm";
 
 export default function PhotosTab({ party, photos }: { party: Party; photos: Photo[] }) {
@@ -27,6 +27,15 @@ export default function PhotosTab({ party, photos }: { party: Party; photos: Pho
                   />
                   <button className="rounded-lg bg-zinc-100 px-2 text-sm font-semibold text-zinc-700" title="Salvar legenda">
                     OK
+                  </button>
+                </form>
+                <form action={setInGallery.bind(null, party.id, p.id, !p.inGallery)} className="px-2 pt-2">
+                  <button
+                    className={`w-full rounded-lg px-2 py-1 text-sm font-semibold ${
+                      p.inGallery ? "bg-emerald-50 text-emerald-700" : "bg-zinc-100 text-zinc-500"
+                    }`}
+                  >
+                    {p.inGallery ? "✅ Na galeria" : "🚫 Fora da galeria"}
                   </button>
                 </form>
                 <div className="flex items-center justify-between px-1 text-sm">

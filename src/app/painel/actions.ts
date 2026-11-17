@@ -27,6 +27,8 @@ function partyFields(form: FormData) {
   const gallery = String(form.get("gallery") || "grade");
   return {
     gallery: GALLERIES[gallery] ? gallery : "grade",
+    greeting: String(form.get("greeting") || "").trim().slice(0, 120) || null,
+    showGreeting: form.get("showGreeting") === "on",
     design: safeDesign,
     palette: paletteFromForm(safeDesign, form),
     honoreeName: String(form.get("honoreeName") || "").trim(),
@@ -150,6 +152,12 @@ export async function setCaption(partyId: string, photoId: string, form: FormDat
   await ownParty(partyId);
   const caption = String(form.get("caption") || "").trim().slice(0, 80) || null;
   await db.photo.update({ where: { id: photoId, partyId }, data: { caption } });
+  revalidatePath(`/painel/festa/${partyId}`);
+}
+
+export async function setInGallery(partyId: string, photoId: string, show: boolean) {
+  await ownParty(partyId);
+  await db.photo.update({ where: { id: photoId, partyId }, data: { inGallery: show } });
   revalidatePath(`/painel/festa/${partyId}`);
 }
 

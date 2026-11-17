@@ -1,4 +1,4 @@
-import { THEMES, toLocalInput } from "@/lib/format";
+import { DEFAULT_GREETING, THEMES, toLocalInput } from "@/lib/format";
 import type { Party } from "@prisma/client";
 import SubmitButton from "./SubmitButton";
 import DesignPicker from "./DesignPicker";
@@ -42,6 +42,22 @@ export default function PartyForm({
             </label>
           ))}
         </div>
+      </div>
+
+      <div>
+        <label className="label">Frase do topo do convite</label>
+        <input
+          name="greeting"
+          className="input"
+          maxLength={120}
+          defaultValue={party?.greeting ?? ""}
+          placeholder={DEFAULT_GREETING}
+        />
+        <label className="mt-2 flex items-center gap-2 text-sm text-zinc-700">
+          <input type="checkbox" name="showGreeting" defaultChecked={party?.showGreeting ?? true} className="h-4 w-4" />
+          Mostrar a frase no convite
+        </label>
+        <p className="mt-1 text-xs text-zinc-500">Deixe em branco para usar a frase padrão.</p>
       </div>
 
       <DesignPicker

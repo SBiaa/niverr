@@ -55,3 +55,11 @@ export const THEMES: Record<string, { label: string; emoji: string; font: string
   quinze: { label: "15 anos", emoji: "👑", font: "font-elegant", bg: "bg-sparkle" },
   adulto: { label: "Adulto", emoji: "🥂", font: "font-elegant", bg: "bg-sparkle" },
 };
+
+export const DEFAULT_GREETING = "Você está convidado(a) para o aniversário de";
+
+/** Frase do topo do convite; null quando o organizador desativou. */
+export function greetingText(party: { greeting: string | null; showGreeting: boolean }) {
+  if (!party.showGreeting) return null;
+  return party.greeting?.trim() || DEFAULT_GREETING;
+}

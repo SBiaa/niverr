@@ -18,12 +18,13 @@ export default function PartyView({
 }: {
   party: Party;
   photos: Photo[];
-  greeting: React.ReactNode;
+  greeting?: React.ReactNode;
   banner?: React.ReactNode;
   rsvp: React.ReactNode;
   gifts?: React.ReactNode;
 }) {
   const theme = THEMES[party.theme] ?? THEMES.infantil;
+  const shown = photos.filter((p) => p.inGallery);
   const past = party.date.getTime() < Date.now() - 12 * 3600 * 1000;
   const def = DESIGNS[party.design];
   const forest = !!def?.scene; // tema com cena própria
@@ -45,7 +46,7 @@ export default function PartyView({
         <div className="relative isolate overflow-hidden">
           <DesignScene design={party.design} palette={pal} className="absolute inset-0 -z-10 h-full w-full" />
           <div className="mx-auto max-w-lg px-4 pb-56 pt-8 text-center">
-            <div className="mx-auto inline-block rounded-2xl bg-white/80 px-4 py-2 backdrop-blur">{greeting}</div>
+            {greeting && <div className="mx-auto inline-block rounded-2xl bg-white/80 px-4 py-2 backdrop-blur">{greeting}</div>}
             {party.profileUrl && (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -91,7 +92,7 @@ export default function PartyView({
           <img src={party.coverUrl!} alt={party.honoreeName} className="absolute inset-0 -z-20 h-full w-full object-cover" />
           <div className="absolute inset-0 -z-10" style={{ background: pal.overlay, opacity: 0.4 }} />
           <div className="mx-auto w-full max-w-lg px-4 pb-10 pt-24 text-center">
-            <div className="mx-auto inline-block rounded-2xl bg-white/80 px-4 py-2 backdrop-blur">{greeting}</div>
+            {greeting && <div className="mx-auto inline-block rounded-2xl bg-white/80 px-4 py-2 backdrop-blur">{greeting}</div>}
             {party.profileUrl && (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -124,7 +125,7 @@ export default function PartyView({
       <div className="mx-auto max-w-lg px-4">
         {!forest && !coverBg && (
         <section className="pt-8 text-center">
-          {onDark ? <div className="mx-auto inline-block rounded-2xl bg-white/80 px-4 py-2">{greeting}</div> : greeting}
+          {onDark && greeting ? <div className="mx-auto inline-block rounded-2xl bg-white/80 px-4 py-2">{greeting}</div> : greeting}
 
           {party.profileUrl && (
             // eslint-disable-next-line @next/next/no-img-element
@@ -178,11 +179,11 @@ export default function PartyView({
           {past ? <p className="text-center text-zinc-600">A festa já aconteceu. 🎈</p> : rsvp}
         </section>
 
-        {photos.length > 0 && (
+        {shown.length > 0 && (
           <section className="mt-8">
             <h2 className={`${theme.font} ${headTone} mb-3 text-center text-2xl font-bold`}>📸 Fotos</h2>
             <div className={headTone}>
-              <Gallery photos={photos} style={party.gallery} />
+              <Gallery photos={shown} style={party.gallery} />
             </div>
           </section>
         )}

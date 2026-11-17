@@ -1,0 +1,2 @@
+ALTER TABLE "Party" ADD COLUMN "greeting" TEXT;
+ALTER TABLE "Party" ADD COLUMN "showGreeting" BOOLEAN NOT NULL DEFAULT true;

@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
 import { track } from "@/lib/track";
-import { fmtDate, fmtTime, THEMES } from "@/lib/format";
+import { fmtDate, fmtTime, greetingText, THEMES } from "@/lib/format";
 import PartyView from "@/components/PartyView";
 import OpenRsvpForm from "./OpenRsvpForm";
 
@@ -36,11 +36,7 @@ export default async function FestaPublica({ params }: { params: Promise<{ slug:
     <PartyView
       party={party}
       photos={party.photos}
-      greeting={
-        <p className="text-lg text-zinc-600">
-          {theme.emoji} Você está convidado(a) para o aniversário de
-        </p>
-      }
+      greeting={greetingText(party) && <p className="text-lg text-zinc-600">{theme.emoji} {greetingText(party)}</p>}
       rsvp={<OpenRsvpForm slug={slug} />}
       gifts={
         party.gifts.length > 0 ? <GiftsList gifts={party.gifts} /> : null

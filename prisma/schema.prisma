@@ -28,6 +28,8 @@ model Party {
   color        String   @default("#ec4899")
   design       String   @default("padrao") // padrao | floresta | ...
   gallery      String   @default("grade") // grade | polaroid | mosaico | carrossel
+  greeting     String?  // frase do topo do convite (null = padrão)
+  showGreeting Boolean  @default(true)
   profileUrl   String?  // foto redonda do aniversariante (coverUrl é a foto de fundo do topo)
   palette      String?  // JSON com as cores trocadas pelo organizador (só o que difere do padrão)
   date       DateTime
@@ -68,6 +70,7 @@ model Photo {
   party     Party    @relation(fields: [partyId], references: [id], onDelete: Cascade)
   url       String
   caption   String?
+  inGallery Boolean  @default(true) // false = não aparece na galeria do convite
   createdAt DateTime @default(now())
 }
 

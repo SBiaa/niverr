@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
 import { track } from "@/lib/track";
-import { fmtDate, fmtTime, firstName, THEMES } from "@/lib/format";
+import { fmtDate, fmtTime, firstName, greetingText, THEMES } from "@/lib/format";
 import PartyView from "@/components/PartyView";
 import RsvpForm from "./RsvpForm";
 
@@ -74,7 +74,7 @@ export default async function Convite({
           <p className="text-lg text-zinc-600">
             Olá, <b style={{ color: party.color }}>{firstName(guest.name)}</b>! {theme.emoji}
           </p>
-          <p className="mt-1 text-zinc-600">Você está convidado(a) para o aniversário de</p>
+          {greetingText(party) && <p className="mt-1 text-zinc-600">{greetingText(party)}</p>}
         </>
       }
       rsvp={

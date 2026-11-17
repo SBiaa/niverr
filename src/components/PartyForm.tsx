@@ -1,5 +1,6 @@
 import { DEFAULT_GREETING, THEMES, toLocalInput } from "@/lib/format";
-import type { Party } from "@prisma/client";
+import type { Party, Photo } from "@prisma/client";
+import PartyPreview from "./PartyPreview";
 import SubmitButton from "./SubmitButton";
 import DesignPicker from "./DesignPicker";
 import { GALLERIES } from "@/lib/galleries";
@@ -14,11 +15,12 @@ export default function PartyForm({
 }: {
   action: (form: FormData) => Promise<void>;
   party?: Party;
-  photos?: { id: string; url: string }[];
+  photos?: Photo[];
   submitLabel: string;
 }) {
   return (
-    <form action={action} className="space-y-4">
+    <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start lg:gap-6">
+    <form id="party-form" action={action} className="card space-y-4">
       <div className="grid gap-4 sm:grid-cols-3">
         <div className="sm:col-span-2">
           <label className="label">Nome do aniversariante (opcional)</label>
@@ -123,5 +125,7 @@ export default function PartyForm({
       </div>
       <SubmitButton>{submitLabel}</SubmitButton>
     </form>
+      <PartyPreview formId="party-form" party={party} photos={photos ?? []} />
+    </div>
   );
 }

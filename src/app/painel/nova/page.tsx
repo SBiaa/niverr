@@ -3,11 +3,9 @@ import { createParty } from "../actions";
 
 export default function NovaFesta() {
   return (
-    <div className="mx-auto max-w-2xl">
+    <div>
       <h1 className="mb-4 text-2xl font-bold">Nova festa 🎉</h1>
-      <div className="card">
-        <PartyForm action={createParty} submitLabel="Criar festa" />
-      </div>
+      <PartyForm action={createParty} submitLabel="Criar festa" />
     </div>
   );
 }

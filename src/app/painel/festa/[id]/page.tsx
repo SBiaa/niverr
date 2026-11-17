@@ -80,11 +80,9 @@ export default async function FestaPage({
       <div className="mt-5">
         {aba === "convidados" && <GuestsTab party={party} guests={party.guests} base={base} />}
         {aba === "detalhes" && (
-          <div className="mx-auto max-w-2xl space-y-6">
-            <div className="card">
-              <PartyForm action={updateParty.bind(null, party.id)} party={party} photos={party.photos} submitLabel="Salvar alterações" />
-            </div>
-            <form action={deleteParty.bind(null, party.id)} className="card border-red-100">
+          <div className="space-y-6">
+            <PartyForm action={updateParty.bind(null, party.id)} party={party} photos={party.photos} submitLabel="Salvar alterações" />
+            <form action={deleteParty.bind(null, party.id)} className="card mx-auto max-w-2xl border-red-100 lg:mx-0">
               <p className="font-semibold text-red-700">Excluir festa</p>
               <p className="text-sm text-zinc-600">Apaga a festa, os convidados, fotos e presentes. Não dá pra desfazer.</p>
               <SubmitButton className="btn mt-3 bg-red-600 text-white" pendingText="Excluindo...">Excluir festa</SubmitButton>

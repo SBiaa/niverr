@@ -39,6 +39,7 @@ model Party {
   venueName    String
   address      String
   message      String?
+  waTemplate   String?  // texto da mensagem do WhatsApp (null = padrão); aceita {nome} {link} etc.
   coverUrl     String?
   active       Boolean  @default(true)
   createdAt    DateTime @default(now())

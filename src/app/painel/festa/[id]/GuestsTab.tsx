@@ -2,7 +2,8 @@ import type { Guest, Party } from "@prisma/client";
 import { addGuests } from "../../actions";
 import SubmitButton from "@/components/SubmitButton";
 import GuestRow from "./GuestRow";
-import { fmtDate, fmtTime, firstName } from "@/lib/format";
+import { buildWaMessage } from "@/lib/waMessage";
+import WaTemplateEditor from "./WaTemplateEditor";
 
 export default function GuestsTab({ party, guests, base }: { party: Party; guests: Guest[]; base: string }) {
   const yes = guests.filter((g) => g.status === "yes");
@@ -11,12 +12,7 @@ export default function GuestsTab({ party, guests, base }: { party: Party; guest
   const people = yes.reduce((s, g) => s + 1 + g.companions, 0);
   const opened = guests.filter((g) => g.openedAt).length;
 
-  const messageFor = (g: Guest) =>
-    `Olá, ${firstName(g.name)}! 🎉\n\n` +
-    `Você está convidado(a) para o aniversário${party.age ? ` de ${party.age} anos` : ""}${party.honoreeName.trim() ? ` de *${party.honoreeName.trim()}*` : ""}!\n` +
-    `📅 ${fmtDate(party.date)} às ${fmtTime(party.date)}\n` +
-    `📍 ${party.venueName}\n\n` +
-    `Confirme sua presença pelo link:\n${base}/c/${g.token}`;
+  const messageFor = (g: Guest) => buildWaMessage(party, g.name, `${base}/c/${g.token}`);
 
   return (
     <div className="space-y-5">
@@ -60,6 +56,13 @@ export default function GuestsTab({ party, guests, base }: { party: Party; guest
           </form>
         </div>
       </details>
+
+      <WaTemplateEditor
+        partyId={party.id}
+        initial={party.waTemplate}
+        preview={{ honoreeName: party.honoreeName, age: party.age, date: party.date.toISOString(), venueName: party.venueName }}
+        base={base}
+      />
 
       {guests.length > 0 && (
         <div className="flex justify-end">

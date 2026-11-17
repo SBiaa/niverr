@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
 import { track } from "@/lib/track";
-import { fmtDate, fmtTime, greetingText, THEMES } from "@/lib/format";
+import { fmtDate, fmtTime, greetingText, birthdayOf, THEMES } from "@/lib/format";
 import PartyView from "@/components/PartyView";
 import OpenRsvpForm from "./OpenRsvpForm";
 
@@ -20,7 +20,7 @@ async function load(slug: string) {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const p = await load((await params).slug);
   if (!p) return { title: "Festa" };
-  const title = `Aniversário ${p.age ? `de ${p.age} anos ` : ""}de ${p.honoreeName} 🎉`;
+  const title = `${birthdayOf(p)} 🎉`;
   const description = `${fmtDate(p.date)} às ${fmtTime(p.date)} · ${p.venueName}. Confirme sua presença!`;
   return { title, description, openGraph: { title, description, images: (p.profileUrl ?? p.coverUrl) ? [(p.profileUrl ?? p.coverUrl)!] : [] } };
 }

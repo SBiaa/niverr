@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { db } from "@/lib/db";
 import { requireUser } from "@/lib/auth";
-import { fmtDate, fmtTime, THEMES } from "@/lib/format";
+import { fmtDate, fmtTime, partyName, THEMES } from "@/lib/format";
 
 export default async function Painel() {
   const user = await requireUser();
@@ -44,7 +44,7 @@ export default async function Painel() {
                 </div>
                 <div className="min-w-0">
                   <p className="truncate text-lg font-bold">
-                    {p.honoreeName} {p.age ? `· ${p.age} anos` : ""}
+                    {partyName(p.honoreeName)} {p.age ? `· ${p.age} anos` : ""}
                   </p>
                   <p className="text-sm first-letter:uppercase text-zinc-600">{fmtDate(p.date)} às {fmtTime(p.date)}</p>
                   <p className="mt-1 text-sm text-zinc-500">

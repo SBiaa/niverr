@@ -10,6 +10,7 @@ export default function DesignPicker({
   photos,
   coverUrl,
   profileUrl,
+  profileSize,
 }: {
   design?: string;
   palette?: string | null;
@@ -17,6 +18,7 @@ export default function DesignPicker({
   photos?: { id: string; url: string }[];
   coverUrl?: string | null;
   profileUrl?: string | null;
+  profileSize?: number;
 }) {
   const [id, setId] = useState(DESIGNS[design ?? ""] ? design! : "padrao");
   // uma paleta por tema; o que veio salvo vale para o tema salvo
@@ -25,6 +27,7 @@ export default function DesignPicker({
   );
   const [cover, setCover] = useState(coverUrl ?? "");
   const [profile, setProfile] = useState(profileUrl ?? "");
+  const [size, setSize] = useState(profileSize ?? 176);
   const def = DESIGNS[id];
   const colors = all[id];
   const setColors = (c: Record<string, string>) => setAll((a) => ({ ...a, [id]: c }));
@@ -39,6 +42,7 @@ export default function DesignPicker({
       <input type="hidden" name="design" value={id} />
       {photos && <input type="hidden" name="coverUrl" value={cover} />}
       {photos && <input type="hidden" name="profileUrl" value={profile} />}
+      {photos && !profile && <input type="hidden" name="profileSize" value={size} />}
       {def.fields.map((f) => (
         <input key={f.key} type="hidden" name={`p_${f.key}`} value={colors[f.key]} />
       ))}
@@ -66,6 +70,25 @@ export default function DesignPicker({
             <>
               {classico && <PhotoPick label="Foto de fundo (capa do topo)" photos={photos} value={cover} onChange={setCover} none="Sem fundo" />}
               <PhotoPick label="Foto do aniversariante (redonda)" photos={photos} value={profile} onChange={setProfile} none="Sem foto" />
+              {profile && (
+                <label className="block text-sm text-zinc-700">
+                  <span className="font-semibold">Tamanho da foto do aniversariante</span>
+                  <div className="mt-1 flex items-center gap-3">
+                    <input
+                      type="range"
+                      name="profileSize"
+                      min={96}
+                      max={320}
+                      step={8}
+                      value={size}
+                      onChange={(e) => setSize(Number(e.target.value))}
+                      className="w-full accent-pink-500"
+                    />
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={profile} alt="" className="shrink-0 rounded-full object-cover" style={{ width: size / 4, height: size / 4 }} />
+                  </div>
+                </label>
+              )}
             </>
           ) : (
             <p className="text-xs text-zinc-500">Envie fotos na aba “Fotos” e volte aqui para escolher a foto de fundo e a do aniversariante.</p>

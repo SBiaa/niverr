@@ -13,7 +13,7 @@ export default function GuestsTab({ party, guests, base }: { party: Party; guest
 
   const messageFor = (g: Guest) =>
     `Olá, ${firstName(g.name)}! 🎉\n\n` +
-    `Você está convidado(a) para o aniversário ${party.age ? `de ${party.age} anos ` : ""}de *${party.honoreeName}*!\n` +
+    `Você está convidado(a) para o aniversário${party.age ? ` de ${party.age} anos` : ""}${party.honoreeName.trim() ? ` de *${party.honoreeName.trim()}*` : ""}!\n` +
     `📅 ${fmtDate(party.date)} às ${fmtTime(party.date)}\n` +
     `📍 ${party.venueName}\n\n` +
     `Confirme sua presença pelo link:\n${base}/c/${g.token}`;

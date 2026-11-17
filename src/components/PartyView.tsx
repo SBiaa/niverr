@@ -24,6 +24,7 @@ export default function PartyView({
   gifts?: React.ReactNode;
 }) {
   const theme = THEMES[party.theme] ?? THEMES.infantil;
+  const name = party.honoreeName.trim();
   const shown = photos.filter((p) => p.inGallery);
   const past = party.date.getTime() < Date.now() - 12 * 3600 * 1000;
   const def = DESIGNS[party.design];
@@ -47,29 +48,24 @@ export default function PartyView({
           <DesignScene design={party.design} palette={pal} className="absolute inset-0 -z-10 h-full w-full" />
           <div className="mx-auto max-w-lg px-4 pb-56 pt-8 text-center">
             {greeting && <div className="mx-auto inline-block rounded-2xl bg-white/80 px-4 py-2 backdrop-blur">{greeting}</div>}
-            {party.profileUrl && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={party.profileUrl}
-                alt={party.honoreeName}
-                className="mx-auto mt-6 h-44 w-44 rounded-full border-8 border-white/90 object-cover shadow-xl sm:h-52 sm:w-52"
-              />
+            {party.profileUrl && <ProfileImg party={party} className="mt-6 border-white/90" />}
+            {name && (
+              <h1
+                className="mt-5 break-words text-5xl font-extrabold leading-tight text-white sm:text-6xl"
+                style={
+                  def.titleColorKey
+                    ? {
+                        color: pal[def.titleColorKey],
+                        WebkitTextStroke: "3px #FFF8E7",
+                        paintOrder: "stroke fill",
+                        textShadow: "0 5px 14px rgba(59,36,24,.25)",
+                      }
+                    : { textShadow: `0 4px 0 ${pal[def.titleShadowKey!]}, 0 10px 28px rgba(0,0,0,.3)` }
+                }
+              >
+                {name}
+              </h1>
             )}
-            <h1
-              className="mt-5 break-words text-5xl font-extrabold leading-tight text-white sm:text-6xl"
-              style={
-                def.titleColorKey
-                  ? {
-                      color: pal[def.titleColorKey],
-                      WebkitTextStroke: "3px #FFF8E7",
-                      paintOrder: "stroke fill",
-                      textShadow: "0 5px 14px rgba(59,36,24,.25)",
-                    }
-                  : { textShadow: `0 4px 0 ${pal[def.titleShadowKey!]}, 0 10px 28px rgba(0,0,0,.3)` }
-              }
-            >
-              {party.honoreeName}
-            </h1>
             {party.age != null && (
               <p
                 className="mt-2 inline-block rounded-full px-4 py-1 text-xl font-bold text-zinc-900"
@@ -89,24 +85,19 @@ export default function PartyView({
       {coverBg && (
         <div className="relative isolate flex min-h-[28rem] flex-col justify-end overflow-hidden rounded-b-[2.5rem] shadow-lg">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={party.coverUrl!} alt={party.honoreeName} className="absolute inset-0 -z-20 h-full w-full object-cover" />
+          <img src={party.coverUrl!} alt={name} className="absolute inset-0 -z-20 h-full w-full object-cover" />
           <div className="absolute inset-0 -z-10" style={{ background: pal.overlay, opacity: 0.4 }} />
           <div className="mx-auto w-full max-w-lg px-4 pb-10 pt-24 text-center">
             {greeting && <div className="mx-auto inline-block rounded-2xl bg-white/80 px-4 py-2 backdrop-blur">{greeting}</div>}
-            {party.profileUrl && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={party.profileUrl}
-                alt={party.honoreeName}
-                className="mx-auto mt-5 h-36 w-36 rounded-full border-8 border-white/90 object-cover shadow-xl sm:h-44 sm:w-44"
-              />
+            {party.profileUrl && <ProfileImg party={party} className="mt-5 border-white/90" />}
+            {name && (
+              <h1
+                className={`${theme.font} mt-4 break-words text-5xl font-bold leading-tight sm:text-6xl`}
+                style={{ color: pal.titleText, textShadow: "0 3px 16px rgba(0,0,0,.45)" }}
+              >
+                {name}
+              </h1>
             )}
-            <h1
-              className={`${theme.font} mt-4 break-words text-5xl font-bold leading-tight sm:text-6xl`}
-              style={{ color: pal.titleText, textShadow: "0 3px 16px rgba(0,0,0,.45)" }}
-            >
-              {party.honoreeName}
-            </h1>
             {party.age != null && (
               <p className="mt-2 inline-block rounded-full px-4 py-1 text-xl font-bold text-zinc-900" style={{ background: party.color }}>
                 {party.theme === "quinze"
@@ -127,18 +118,13 @@ export default function PartyView({
         <section className="pt-8 text-center">
           {onDark && greeting ? <div className="mx-auto inline-block rounded-2xl bg-white/80 px-4 py-2">{greeting}</div> : greeting}
 
-          {party.profileUrl && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={party.profileUrl}
-              alt={party.honoreeName}
-              className="mx-auto mt-6 h-48 w-48 rounded-full sm:h-56 sm:w-56 border-8 border-white object-cover shadow-xl"
-            />
-          )}
+          {party.profileUrl && <ProfileImg party={party} className="mt-6 border-white" />}
 
-          <h1 className={`${theme.font} mt-5 break-words text-5xl font-bold leading-tight sm:text-6xl`} style={{ color: party.color }}>
-            {party.honoreeName}
-          </h1>
+          {name && (
+            <h1 className={`${theme.font} mt-5 break-words text-5xl font-bold leading-tight sm:text-6xl`} style={{ color: party.color }}>
+              {name}
+            </h1>
+          )}
           {party.age != null && (
             <p className={`${theme.font} mt-2 text-2xl font-semibold ${onDark ? "text-white" : "text-zinc-700"}`}>
               {party.theme === "quinze"
@@ -200,5 +186,18 @@ export default function PartyView({
         </p>
       </div>
     </main>
+  );
+}
+
+/** Foto redonda do aniversariante, no tamanho escolhido pelo organizador. */
+function ProfileImg({ party, className }: { party: Party; className?: string }) {
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={party.profileUrl!}
+      alt={party.honoreeName}
+      className={`mx-auto rounded-full border-8 object-cover shadow-xl ${className ?? ""}`}
+      style={{ width: party.profileSize, maxWidth: "100%", aspectRatio: "1" }}
+    />
   );
 }

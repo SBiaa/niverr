@@ -29,7 +29,7 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
   return new Response(csv, {
     headers: {
       "Content-Type": "text/csv; charset=utf-8",
-      "Content-Disposition": `attachment; filename="convidados-${party.honoreeName.replace(/\W+/g, "-")}.csv"`,
+      "Content-Disposition": `attachment; filename="convidados-${party.honoreeName.replace(/\W+/g, "-") || "festa"}.csv"`,
     },
   });
 }

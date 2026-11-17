@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { db } from "@/lib/db";
 import { requireSuperAdmin } from "@/lib/auth";
-import { fmtDateTime } from "@/lib/format";
+import { fmtDateTime, partyName } from "@/lib/format";
 import { toggleParty, resolveError, resolveAllErrors } from "./actions";
 
 const KIND: Record<string, string> = {
@@ -216,7 +216,7 @@ async function Accesses() {
                 <td className="whitespace-nowrap p-3">{fmtDateTime(l.createdAt)}</td>
                 <td className="p-3">{KIND[l.kind] ?? l.kind}</td>
                 <td className="p-3">
-                  {g ? <>{g.name} <span className="text-zinc-500">(festa de {g.party.honoreeName})</span></> : u ? <>{u.name} <span className="text-zinc-500">{u.email}</span></> : l.path}
+                  {g ? <>{g.name} <span className="text-zinc-500">(festa de {partyName(g.party.honoreeName)})</span></> : u ? <>{u.name} <span className="text-zinc-500">{u.email}</span></> : l.path}
                 </td>
                 <td className="hidden p-3 sm:table-cell">{l.device}</td>
                 <td className="hidden p-3 font-mono text-xs text-zinc-500 sm:table-cell">{l.ip}</td>
@@ -245,7 +245,7 @@ async function Parties() {
         <tbody>
           {parties.map((p) => (
             <tr key={p.id} className="border-t border-zinc-100">
-              <td className="p-3 font-semibold">{p.honoreeName} {p.age ? `(${p.age})` : ""}</td>
+              <td className="p-3 font-semibold">{partyName(p.honoreeName)} {p.age ? `(${p.age})` : ""}</td>
               <td className="p-3">{p.owner.name}<br /><span className="text-xs text-zinc-500">{p.owner.email}</span></td>
               <td className="whitespace-nowrap p-3">{fmtDateTime(p.date)}</td>
               <td className="p-3">{p.guests.length}</td>

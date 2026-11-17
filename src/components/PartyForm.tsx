@@ -21,8 +21,8 @@ export default function PartyForm({
     <form action={action} className="space-y-4">
       <div className="grid gap-4 sm:grid-cols-3">
         <div className="sm:col-span-2">
-          <label className="label">Nome do aniversariante *</label>
-          <input name="honoreeName" className="input" required defaultValue={party?.honoreeName} placeholder="Ex: Isadora" />
+          <label className="label">Nome do aniversariante (opcional)</label>
+          <input name="honoreeName" className="input" defaultValue={party?.honoreeName} placeholder="Ex: Isadora" />
         </div>
         <div>
           <label className="label">Idade que vai fazer</label>
@@ -66,6 +66,7 @@ export default function PartyForm({
         photos={photos}
         coverUrl={party?.coverUrl}
         profileUrl={party?.profileUrl}
+        profileSize={party?.profileSize}
       />
 
       <div>

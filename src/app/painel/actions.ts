@@ -27,6 +27,7 @@ function partyFields(form: FormData) {
   const gallery = String(form.get("gallery") || "grade");
   return {
     gallery: GALLERIES[gallery] ? gallery : "grade",
+    profileSize: Math.min(320, Math.max(96, parseInt(String(form.get("profileSize") || ""), 10) || 176)),
     greeting: String(form.get("greeting") || "").trim().slice(0, 120) || null,
     showGreeting: form.get("showGreeting") === "on",
     design: safeDesign,
@@ -46,7 +47,7 @@ function partyFields(form: FormData) {
 export async function createParty(form: FormData) {
   const user = await requireUser();
   const data = partyFields(form);
-  if (!data.honoreeName || !data.venueName || !data.address || isNaN(data.date.getTime()))
+  if (!data.venueName || !data.address || isNaN(data.date.getTime()))
     throw new Error("Preencha os campos obrigatórios");
   const party = await db.party.create({ data: { ...data, ownerId: user.id } });
   await ensureSlug(party);

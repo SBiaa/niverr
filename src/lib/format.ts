@@ -63,3 +63,12 @@ export function greetingText(party: { greeting: string | null; showGreeting: boo
   if (!party.showGreeting) return null;
   return party.greeting?.trim() || DEFAULT_GREETING;
 }
+
+/** Nome da festa para listas internas (o nome pode ficar em branco no convite). */
+export const partyName = (name: string) => name.trim() || "Festa sem nome";
+
+/** "Aniversário de 7 anos de Isadora" — o nome é opcional. */
+export function birthdayOf(p: { age: number | null; honoreeName: string }) {
+  const name = p.honoreeName.trim();
+  return `Aniversário${p.age ? ` de ${p.age} anos` : ""}${name ? ` de ${name}` : ""}`;
+}

@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
 import { requireUser } from "@/lib/auth";
 import { baseUrl } from "@/lib/url";
-import { fmtDate, fmtTime, THEMES } from "@/lib/format";
+import { fmtDate, fmtTime, partyName, THEMES } from "@/lib/format";
 import GuestsTab from "./GuestsTab";
 import PhotosTab from "./PhotosTab";
 import GiftsTab from "./GiftsTab";
@@ -48,7 +48,7 @@ export default async function FestaPage({
       <div className="mt-2 flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold">
-            {THEMES[party.theme]?.emoji} {party.honoreeName} {party.age ? `· ${party.age} anos` : ""}
+            {THEMES[party.theme]?.emoji} {partyName(party.honoreeName)} {party.age ? `· ${party.age} anos` : ""}
           </h1>
           <p className="first-letter:uppercase text-zinc-600">
             {fmtDate(party.date)} às {fmtTime(party.date)} · {party.venueName}

@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { getUser, isSuperAdmin } from "@/lib/auth";
-import { fmtDateTime } from "@/lib/format";
+import { fmtDateTime, partyName } from "@/lib/format";
 
 export async function GET(req: Request) {
   const user = await getUser();
@@ -11,7 +11,7 @@ export async function GET(req: Request) {
   if (type === "festas") {
     const ps = await db.party.findMany({ include: { owner: true, guests: true }, orderBy: { createdAt: "desc" } });
     rows = [["Aniversariante", "Idade", "Tema", "Data", "Organizador", "E-mail", "Convidados", "Enviados", "Abriram", "Vão", "Não vão", "Pessoas", "Ativa", "Criada em"],
-      ...ps.map((p) => [p.honoreeName, p.age, p.theme, fmtDateTime(p.date), p.owner.name, p.owner.email, p.guests.length,
+      ...ps.map((p) => [partyName(p.honoreeName), p.age, p.theme, fmtDateTime(p.date), p.owner.name, p.owner.email, p.guests.length,
         p.guests.filter((g) => g.sentAt).length, p.guests.filter((g) => g.openedAt).length,
         p.guests.filter((g) => g.status === "yes").length, p.guests.filter((g) => g.status === "no").length,
         p.guests.filter((g) => g.status === "yes").reduce((s, g) => s + 1 + g.companions, 0), p.active ? "sim" : "não", fmtDateTime(p.createdAt)])];

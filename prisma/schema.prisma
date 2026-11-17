@@ -30,6 +30,7 @@ model Party {
   gallery      String   @default("grade") // grade | polaroid | mosaico | carrossel
   greeting     String?  // frase do topo do convite (null = padrão)
   showGreeting Boolean  @default(true)
+  profileSize  Int      @default(176) // diâmetro (px) da foto redonda do aniversariante
   profileUrl   String?  // foto redonda do aniversariante (coverUrl é a foto de fundo do topo)
   palette      String?  // JSON com as cores trocadas pelo organizador (só o que difere do padrão)
   date       DateTime

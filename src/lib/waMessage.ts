@@ -17,7 +17,7 @@ export const WA_KINDS: Record<WaKind, { title: string; vars: [string, string][];
     vars: [["{nome}", "primeiro nome do convidado"], ...COMMON_VARS],
     defaultTemplate:
       "Olá, {nome}! 🎉\n\n" +
-      "Você está convidado(a) para o aniversário {idade} {aniversariante}!\n" +
+      "Você está convidado(a) para o aniversário de {idade} de {aniversariante}!\n" +
       "📅 {data} às {hora}\n" +
       "📍 {local}\n\n" +
       "Confirme sua presença pelo link:\n{link}",
@@ -27,7 +27,7 @@ export const WA_KINDS: Record<WaKind, { title: string; vars: [string, string][];
     title: "✏️ Editar texto da mensagem do link geral",
     vars: COMMON_VARS,
     defaultTemplate:
-      "🎉 Você está convidado(a) para o aniversário {aniversariante}!\n" +
+      "🎉 Você está convidado(a) para o aniversário de {aniversariante}!\n" +
       "Veja os detalhes e confirme sua presença:\n{link}",
     sample: "",
   },
@@ -40,14 +40,16 @@ export function buildWaMessage(party: P, kind: WaKind, guestName: string, link: 
   const honoree = party.honoreeName.trim();
   const vars: Record<string, string> = {
     nome: firstName(guestName || ""),
-    aniversariante: honoree ? `de *${honoree}*` : "",
-    idade: party.age ? `de ${party.age} anos` : "",
+    aniversariante: honoree ? `*${honoree}*` : "",
+    idade: party.age ? `${party.age} anos` : "",
     data: fmtDate(party.date),
     hora: fmtTime(party.date),
     local: party.venueName,
     link,
   };
-  let out = tpl.replace(/\{(\w+)\}/g, (m, k) => (k in vars ? vars[k] : m));
+  // idade/aniversariante vazios somem junto com o "de" que vem antes
+  let out = tpl.replace(/(\s+de)?(\s*)\{(idade|aniversariante)\}/g, (_m, de, sp, k) => (vars[k] ? `${de ?? ""}${sp}${vars[k]}` : ""));
+  out = out.replace(/\{(\w+)\}/g, (m, k) => (k in vars ? vars[k] : m));
   out = out.replace(/[ \t]+([!.,\n])/g, "$1").replace(/ {2,}/g, " ");
   // sem {link} no texto: o link vai no final, senão a pessoa não consegue confirmar
   if (!tpl.includes("{link}")) out = `${out.trimEnd()}\n\n${link}`;

@@ -12,7 +12,7 @@ export default function GuestsTab({ party, guests, base }: { party: Party; guest
   const people = yes.reduce((s, g) => s + 1 + g.companions, 0);
   const opened = guests.filter((g) => g.openedAt).length;
 
-  const messageFor = (g: Guest) => buildWaMessage(party, "guest", g.name, `${base}/c/${g.token}`);
+  const messageFor = (g: Guest) => buildWaMessage(party, "guest", g.name, `${base}/c/${g.token}`, party.waTemplate);
 
   return (
     <div className="space-y-5">

@@ -142,7 +142,20 @@ export default function PartyView({
 
         <section className="card mt-6 space-y-4">
           <div className="flex gap-3">
-            <span className="text-2xl">📅</span>
+            <svg
+              className="h-7 w-7 shrink-0"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              style={{ color: party.color }}
+              aria-hidden="true"
+            >
+              <rect x="3" y="5" width="18" height="16" rx="3" />
+              <path d="M3 10h18M8 3v4M16 3v4" />
+            </svg>
             <div>
               <p className="font-bold first-letter:uppercase">{fmtDate(party.date)}</p>
               <p className="text-zinc-600">

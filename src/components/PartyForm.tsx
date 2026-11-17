@@ -1,6 +1,7 @@
 import { DEFAULT_GREETING, THEMES, toLocalInput } from "@/lib/format";
 import type { Party, Photo } from "@prisma/client";
 import PartyPreview from "./PartyPreview";
+import EndTimeInput from "./EndTimeInput";
 import SubmitButton from "./SubmitButton";
 import DesignPicker from "./DesignPicker";
 import { GALLERIES } from "@/lib/galleries";
@@ -106,7 +107,7 @@ export default function PartyForm({
         </div>
         <div>
           <label className="label">Termina às (opcional)</label>
-          <input name="endTime" type="time" className="input" defaultValue={party?.endTime ?? ""} />
+          <EndTimeInput defaultValue={party?.endTime} />
         </div>
       </div>
 

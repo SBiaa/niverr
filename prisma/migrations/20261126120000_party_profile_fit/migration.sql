@@ -1,0 +1,1 @@
+ALTER TABLE "Party" ADD COLUMN "profileFit" TEXT NOT NULL DEFAULT 'cover';

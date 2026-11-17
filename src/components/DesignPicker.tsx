@@ -11,6 +11,7 @@ export default function DesignPicker({
   coverUrl,
   profileUrl,
   profileSize,
+  profileFit,
 }: {
   design?: string;
   palette?: string | null;
@@ -19,6 +20,7 @@ export default function DesignPicker({
   coverUrl?: string | null;
   profileUrl?: string | null;
   profileSize?: number;
+  profileFit?: string;
 }) {
   const [id, setId] = useState(DESIGNS[design ?? ""] ? design! : "padrao");
   // uma paleta por tema; o que veio salvo vale para o tema salvo
@@ -27,6 +29,7 @@ export default function DesignPicker({
   );
   const [cover, setCover] = useState(coverUrl ?? "");
   const [profile, setProfile] = useState(profileUrl ?? "");
+  const [fit, setFit] = useState(profileFit === "contain");
   const [size, setSize] = useState(profileSize ?? 176);
   const def = DESIGNS[id];
   const colors = all[id];
@@ -43,6 +46,7 @@ export default function DesignPicker({
       {photos && <input type="hidden" name="coverUrl" value={cover} />}
       {photos && <input type="hidden" name="profileUrl" value={profile} />}
       {photos && !profile && <input type="hidden" name="profileSize" value={size} />}
+      {photos && !profile && fit && <input type="hidden" name="profileFit" value="contain" />}
       {def.fields.map((f) => (
         <input key={f.key} type="hidden" name={`p_${f.key}`} value={colors[f.key]} />
       ))}
@@ -85,8 +89,14 @@ export default function DesignPicker({
                       className="w-full accent-pink-500"
                     />
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={profile} alt="" className="shrink-0 rounded-full object-cover" style={{ width: size / 4, height: size / 4 }} />
+                    <img src={profile} alt="" className={`shrink-0 rounded-full bg-white ${fit ? "object-contain" : "object-cover"}`} style={{ width: size / 4, height: size / 4 }} />
                   </div>
+                </label>
+              )}
+              {profile && (
+                <label className="flex items-center gap-2 text-sm text-zinc-700">
+                  <input type="checkbox" name="profileFit" value="contain" checked={fit} onChange={(e) => setFit(e.target.checked)} className="h-4 w-4" />
+                  Mostrar a foto inteira (sem cortar, ex.: para aparecer o nome escrito na foto)
                 </label>
               )}
             </>

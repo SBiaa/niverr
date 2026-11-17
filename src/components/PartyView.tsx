@@ -196,7 +196,7 @@ function ProfileImg({ party, className }: { party: Party; className?: string }) 
     <img
       src={party.profileUrl!}
       alt={party.honoreeName}
-      className={`mx-auto rounded-full border-8 object-cover shadow-xl ${className ?? ""}`}
+      className={`mx-auto rounded-full border-8 bg-white shadow-xl ${party.profileFit === "contain" ? "object-contain" : "object-cover"} ${className ?? ""}`}
       style={{ width: party.profileSize, maxWidth: "100%", aspectRatio: "1" }}
     />
   );

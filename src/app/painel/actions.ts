@@ -28,6 +28,7 @@ function partyFields(form: FormData) {
   return {
     gallery: GALLERIES[gallery] ? gallery : "grade",
     profileSize: Math.min(320, Math.max(96, parseInt(String(form.get("profileSize") || ""), 10) || 176)),
+    profileFit: form.get("profileFit") === "contain" ? "contain" : "cover",
     greeting: String(form.get("greeting") || "").trim().slice(0, 120) || null,
     showGreeting: form.get("showGreeting") === "on",
     design: safeDesign,

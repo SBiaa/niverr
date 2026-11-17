@@ -67,6 +67,7 @@ export default function PartyForm({
         coverUrl={party?.coverUrl}
         profileUrl={party?.profileUrl}
         profileSize={party?.profileSize}
+        profileFit={party?.profileFit}
       />
 
       <div>

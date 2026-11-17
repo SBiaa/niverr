@@ -31,6 +31,7 @@ model Party {
   greeting     String?  // frase do topo do convite (null = padrão)
   showGreeting Boolean  @default(true)
   profileSize  Int      @default(176) // diâmetro (px) da foto redonda do aniversariante
+  profileFit   String   @default("cover") // "cover" (preenche e corta) ou "contain" (foto inteira)
   profileUrl   String?  // foto redonda do aniversariante (coverUrl é a foto de fundo do topo)
   palette      String?  // JSON com as cores trocadas pelo organizador (só o que difere do padrão)
   date       DateTime

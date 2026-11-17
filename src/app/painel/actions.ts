@@ -27,6 +27,7 @@ function partyFields(form: FormData) {
   const gallery = String(form.get("gallery") || "grade");
   return {
     gallery: GALLERIES[gallery] ? gallery : "grade",
+    coverStyle: form.get("coverStyle") === "fundo" ? "fundo" : "redonda",
     design: safeDesign,
     palette: paletteFromForm(safeDesign, form),
     honoreeName: String(form.get("honoreeName") || "").trim(),
@@ -53,7 +54,14 @@ export async function createParty(form: FormData) {
 
 export async function updateParty(partyId: string, form: FormData) {
   await ownParty(partyId);
-  await db.party.update({ where: { id: partyId }, data: partyFields(form) });
+  // a capa só muda se o formulário trouxe o campo e a foto é mesmo desta festa
+  let cover: { coverUrl: string | null } | undefined;
+  if (form.has("coverUrl")) {
+    const url = String(form.get("coverUrl") || "");
+    if (!url) cover = { coverUrl: null };
+    else if (await db.photo.findFirst({ where: { partyId, url } })) cover = { coverUrl: url };
+  }
+  await db.party.update({ where: { id: partyId }, data: { ...partyFields(form), ...cover } });
   revalidatePath(`/painel/festa/${partyId}`);
 }
 

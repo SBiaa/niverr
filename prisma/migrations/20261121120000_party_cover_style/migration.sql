@@ -1,0 +1,1 @@
+ALTER TABLE "Party" ADD COLUMN "coverStyle" TEXT NOT NULL DEFAULT 'redonda';

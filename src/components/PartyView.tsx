@@ -28,14 +28,17 @@ export default function PartyView({
   const def = DESIGNS[party.design];
   const forest = !!def?.scene; // tema com cena própria
   const pal = resolvePalette(party.design, party.palette);
-  const pageBg = forest ? pal[def.pageKey!] : "";
-  const onDark = forest && isDark(pageBg);
+  // clássico: só troca o fundo estampado do tipo de festa se o organizador escolheu outra cor
+  const customBg = !forest && !!def && pal.pageBg !== def.palette.pageBg;
+  const pageBg = forest ? pal[def.pageKey!] : customBg ? pal.pageBg : "";
+  const onDark = !!pageBg && isDark(pageBg);
   const headTone = onDark ? "text-white" : "";
+  const coverBg = !forest && party.coverStyle === "fundo" && !!party.coverUrl;
 
   return (
     <main
-      className={`${forest ? "" : theme.bg} min-h-screen pb-16`}
-      style={{ ["--accent" as string]: party.color, ...(forest ? { background: pageBg } : {}) }}
+      className={`${pageBg ? "" : theme.bg} min-h-screen pb-16`}
+      style={{ ["--accent" as string]: party.color, ...(pageBg ? { background: pageBg } : {}) }}
     >
       {banner}
       {forest && (
@@ -82,10 +85,38 @@ export default function PartyView({
           </div>
         </div>
       )}
+      {coverBg && (
+        <div className="relative isolate flex min-h-[28rem] flex-col justify-end overflow-hidden rounded-b-[2.5rem] shadow-lg">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={party.coverUrl!} alt={party.honoreeName} className="absolute inset-0 -z-20 h-full w-full object-cover" />
+          <div className="absolute inset-0 -z-10" style={{ background: pal.overlay, opacity: 0.4 }} />
+          <div className="mx-auto w-full max-w-lg px-4 pb-10 pt-24 text-center">
+            <div className="mx-auto inline-block rounded-2xl bg-white/80 px-4 py-2 backdrop-blur">{greeting}</div>
+            <h1
+              className={`${theme.font} mt-4 break-words text-5xl font-bold leading-tight sm:text-6xl`}
+              style={{ color: pal.titleText, textShadow: "0 3px 16px rgba(0,0,0,.45)" }}
+            >
+              {party.honoreeName}
+            </h1>
+            {party.age != null && (
+              <p className="mt-2 inline-block rounded-full px-4 py-1 text-xl font-bold text-zinc-900" style={{ background: party.color }}>
+                {party.theme === "quinze"
+                  ? "✨ 15 anos ✨"
+                  : `${party.age} ${party.age === 1 ? "aninho" : party.theme === "infantil" ? "aninhos" : "anos"}`}
+              </p>
+            )}
+            {party.message && (
+              <p className="mx-auto mt-5 max-w-md whitespace-pre-line rounded-2xl bg-black/35 px-4 py-3 text-white">
+                {party.message}
+              </p>
+            )}
+          </div>
+        </div>
+      )}
       <div className="mx-auto max-w-lg px-4">
-        {!forest && (
+        {!forest && !coverBg && (
         <section className="pt-8 text-center">
-          {greeting}
+          {onDark ? <div className="mx-auto inline-block rounded-2xl bg-white/80 px-4 py-2">{greeting}</div> : greeting}
 
           {party.coverUrl && (
             // eslint-disable-next-line @next/next/no-img-element
@@ -100,13 +131,15 @@ export default function PartyView({
             {party.honoreeName}
           </h1>
           {party.age != null && (
-            <p className={`${theme.font} mt-2 text-2xl font-semibold text-zinc-700`}>
+            <p className={`${theme.font} mt-2 text-2xl font-semibold ${onDark ? "text-white" : "text-zinc-700"}`}>
               {party.theme === "quinze"
                 ? "✨ 15 anos ✨"
                 : `${party.age} ${party.age === 1 ? "aninho" : party.theme === "infantil" ? "aninhos" : "anos"}`}
             </p>
           )}
-          {party.message && <p className="mx-auto mt-5 max-w-md whitespace-pre-line text-zinc-700">{party.message}</p>}
+          {party.message && (
+            <p className={`mx-auto mt-5 max-w-md whitespace-pre-line ${onDark ? "text-white" : "text-zinc-700"}`}>{party.message}</p>
+          )}
         </section>
         )}
 

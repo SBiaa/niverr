@@ -22,6 +22,13 @@ export type DesignDef = {
   fields: PaletteField[];
 };
 
+/** Clássico: pageBg só vale se o organizador trocar (senão fica o fundo estampado do tipo de festa). */
+export const CLASSICO_PALETTE = {
+  pageBg: "#fdf2f8",
+  overlay: "#000000",
+  titleText: "#ffffff",
+};
+
 export const MAR_PALETTE = {
   waterTop: "#8FE9F0",
   waterUpper: "#3BB8DA",
@@ -71,8 +78,12 @@ export const DESIGNS: Record<string, DesignDef> = {
     label: "Clássico",
     emoji: "🎈",
     description: "O convite simples, com a cor que você escolher.",
-    palette: {},
-    fields: [],
+    palette: CLASSICO_PALETTE,
+    fields: [
+      { key: "pageBg", label: "Fundo da página" },
+      { key: "overlay", label: "Película sobre a foto de fundo" },
+      { key: "titleText", label: "Nome sobre a foto de fundo" },
+    ],
   },
   floresta: {
     id: "floresta",

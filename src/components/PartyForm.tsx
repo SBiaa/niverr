@@ -9,10 +9,12 @@ const COLORS = ["#ec4899", "#8b5cf6", "#3b82f6", "#10b981", "#f59e0b", "#ef4444"
 export default function PartyForm({
   action,
   party,
+  photos,
   submitLabel,
 }: {
   action: (form: FormData) => Promise<void>;
   party?: Party;
+  photos?: { id: string; url: string }[];
   submitLabel: string;
 }) {
   return (
@@ -42,7 +44,13 @@ export default function PartyForm({
         </div>
       </div>
 
-      <DesignPicker design={party?.design} palette={party?.palette} />
+      <DesignPicker
+        design={party?.design}
+        palette={party?.palette}
+        photos={photos}
+        coverUrl={party?.coverUrl}
+        coverStyle={party?.coverStyle}
+      />
 
       <div>
         <label className="label">Estilo da galeria de fotos</label>

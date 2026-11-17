@@ -82,7 +82,7 @@ export default async function FestaPage({
         {aba === "detalhes" && (
           <div className="mx-auto max-w-2xl space-y-6">
             <div className="card">
-              <PartyForm action={updateParty.bind(null, party.id)} party={party} submitLabel="Salvar alterações" />
+              <PartyForm action={updateParty.bind(null, party.id)} party={party} photos={party.photos} submitLabel="Salvar alterações" />
             </div>
             <form action={deleteParty.bind(null, party.id)} className="card border-red-100">
               <p className="font-semibold text-red-700">Excluir festa</p>

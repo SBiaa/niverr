@@ -70,10 +70,10 @@ export async function updateParty(partyId: string, form: FormData) {
   revalidatePath(`/painel/festa/${partyId}`);
 }
 
-export async function saveWaTemplate(partyId: string, form: FormData) {
+export async function saveWaTemplate(partyId: string, kind: "guest" | "public", form: FormData) {
   await ownParty(partyId);
   const text = String(form.get("waTemplate") || "").replace(/\r\n/g, "\n").trim().slice(0, 1500);
-  await db.party.update({ where: { id: partyId }, data: { waTemplate: text || null } });
+  await db.party.update({ where: { id: partyId }, data: kind === "public" ? { waPublicTemplate: text || null } : { waTemplate: text || null } });
   revalidatePath(`/painel/festa/${partyId}`);
 }
 

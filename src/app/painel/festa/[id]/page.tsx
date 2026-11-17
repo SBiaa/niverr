@@ -12,6 +12,8 @@ import SubmitButton from "@/components/SubmitButton";
 import { updateParty, deleteParty } from "../../actions";
 import { ensureSlug } from "@/lib/slug";
 import PublicLink from "./PublicLink";
+import WaTemplateEditor from "./WaTemplateEditor";
+import { buildWaMessage } from "@/lib/waMessage";
 
 const TABS = [
   ["convidados", "👥 Convidados"],
@@ -61,7 +63,19 @@ export default async function FestaPage({
         )}
       </div>
 
-      <PublicLink url={`${base}/f/${slug}`} honoree={party.honoreeName} />
+      <PublicLink
+        url={`${base}/f/${slug}`}
+        text={buildWaMessage(party, "public", "", `${base}/f/${slug}`, party.waPublicTemplate)}
+      />
+      <div className="mt-2">
+        <WaTemplateEditor
+          kind="public"
+          partyId={party.id}
+          initial={party.waPublicTemplate}
+          preview={{ honoreeName: party.honoreeName, age: party.age, date: party.date.toISOString(), venueName: party.venueName }}
+          base={base}
+        />
+      </div>
 
       <nav className="mt-5 flex gap-1 overflow-x-auto border-b border-zinc-200">
         {TABS.map(([k, label]) => (

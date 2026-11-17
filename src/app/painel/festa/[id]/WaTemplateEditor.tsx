@@ -1,28 +1,32 @@
 "use client";
 import { useRef, useState, useTransition } from "react";
 import { saveWaTemplate } from "../../actions";
-import { buildWaMessage, DEFAULT_WA_TEMPLATE, WA_VARS } from "@/lib/waMessage";
+import { buildWaMessage, WA_KINDS, type WaKind } from "@/lib/waMessage";
 
 export default function WaTemplateEditor({
+  kind,
   partyId,
   initial,
   preview,
   base,
 }: {
+  kind: WaKind;
   partyId: string;
   initial: string | null;
   preview: { honoreeName: string; age: number | null; date: string; venueName: string };
   base: string;
 }) {
-  const [text, setText] = useState(initial?.trim() ? initial : DEFAULT_WA_TEMPLATE);
+  const { title, vars, defaultTemplate, sample } = WA_KINDS[kind];
+  const [text, setText] = useState(initial?.trim() ? initial : defaultTemplate);
   const [saved, setSaved] = useState(false);
   const [pending, start] = useTransition();
   const ref = useRef<HTMLTextAreaElement>(null);
 
   const shown = buildWaMessage(
-    { ...preview, date: new Date(preview.date), waTemplate: null },
-    "Maria Silva",
-    `${base}/c/abc123`,
+    { ...preview, date: new Date(preview.date) },
+    kind,
+    sample,
+    kind === "guest" ? `${base}/c/abc123` : `${base}/f/exemplo`,
     text,
   );
 
@@ -39,16 +43,16 @@ export default function WaTemplateEditor({
 
   const save = () => {
     const fd = new FormData();
-    fd.set("waTemplate", text.trim() === DEFAULT_WA_TEMPLATE ? "" : text);
+    fd.set("waTemplate", text.trim() === defaultTemplate ? "" : text);
     start(async () => {
-      await saveWaTemplate(partyId, fd);
+      await saveWaTemplate(partyId, kind, fd);
       setSaved(true);
     });
   };
 
   return (
     <details className="card">
-      <summary className="cursor-pointer font-bold">✏️ Editar texto da mensagem do WhatsApp</summary>
+      <summary className="cursor-pointer font-bold">{title}</summary>
       <div className="mt-4 grid gap-4 md:grid-cols-2">
         <div className="space-y-2">
           <textarea
@@ -62,7 +66,7 @@ export default function WaTemplateEditor({
             }}
           />
           <div className="flex flex-wrap gap-1">
-            {WA_VARS.map(([v, d]) => (
+            {vars.map(([v, d]) => (
               <button key={v} type="button" title={d} onClick={() => insert(v)} className="rounded-full bg-zinc-100 px-2 py-1 font-mono text-xs hover:bg-zinc-200">
                 {v}
               </button>
@@ -75,13 +79,13 @@ export default function WaTemplateEditor({
             <button type="button" onClick={save} disabled={pending} className="btn-primary">
               {pending ? "Salvando..." : saved ? "Salvo ✔" : "Salvar texto"}
             </button>
-            <button type="button" className="btn-ghost" onClick={() => { setText(DEFAULT_WA_TEMPLATE); setSaved(false); }}>
+            <button type="button" className="btn-ghost" onClick={() => { setText(defaultTemplate); setSaved(false); }}>
               Restaurar padrão
             </button>
           </div>
         </div>
         <div>
-          <p className="mb-1 text-xs font-semibold uppercase text-zinc-500">Prévia (Maria Silva)</p>
+          <p className="mb-1 text-xs font-semibold uppercase text-zinc-500">Prévia{sample ? ` (${sample})` : ""}</p>
           <pre className="whitespace-pre-wrap break-words rounded-xl bg-emerald-50 p-3 font-sans text-sm">{shown}</pre>
         </div>
       </div>

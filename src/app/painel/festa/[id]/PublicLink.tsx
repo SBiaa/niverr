@@ -1,9 +1,8 @@
 "use client";
 import { useState } from "react";
 
-export default function PublicLink({ url, honoree }: { url: string; honoree: string }) {
+export default function PublicLink({ url, text }: { url: string; text: string }) {
   const [copied, setCopied] = useState(false);
-  const text = `🎉 Você está convidado(a) para o aniversário${honoree.trim() ? ` de ${honoree.trim()}` : ""}!\nVeja os detalhes e confirme sua presença:\n${url}`;
 
   const copy = async () => {
     await navigator.clipboard.writeText(url);

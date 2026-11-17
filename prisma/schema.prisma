@@ -40,6 +40,7 @@ model Party {
   address      String
   message      String?
   waTemplate   String?  // texto da mensagem do WhatsApp (null = padrão); aceita {nome} {link} etc.
+  waPublicTemplate String? // idem, para o link geral da festa
   coverUrl     String?
   active       Boolean  @default(true)
   createdAt    DateTime @default(now())

@@ -1,7 +1,8 @@
 import { fmtDate, fmtTime, firstName } from "@/lib/format";
 
-export const WA_VARS: [string, string][] = [
-  ["{nome}", "primeiro nome do convidado"],
+export type WaKind = "guest" | "public";
+
+const COMMON_VARS: [string, string][] = [
   ["{aniversariante}", "nome do aniversariante"],
   ["{idade}", "idade (ex: 7 anos)"],
   ["{data}", "data da festa"],
@@ -10,20 +11,35 @@ export const WA_VARS: [string, string][] = [
   ["{link}", "link do convite"],
 ];
 
-export const DEFAULT_WA_TEMPLATE =
-  "Olá, {nome}! 🎉\n\n" +
-  "Você está convidado(a) para o aniversário {idade} {aniversariante}!\n" +
-  "📅 {data} às {hora}\n" +
-  "📍 {local}\n\n" +
-  "Confirme sua presença pelo link:\n{link}";
+export const WA_KINDS: Record<WaKind, { title: string; vars: [string, string][]; defaultTemplate: string; sample: string }> = {
+  guest: {
+    title: "✏️ Editar texto da mensagem do WhatsApp (convite de cada convidado)",
+    vars: [["{nome}", "primeiro nome do convidado"], ...COMMON_VARS],
+    defaultTemplate:
+      "Olá, {nome}! 🎉\n\n" +
+      "Você está convidado(a) para o aniversário {idade} {aniversariante}!\n" +
+      "📅 {data} às {hora}\n" +
+      "📍 {local}\n\n" +
+      "Confirme sua presença pelo link:\n{link}",
+    sample: "Maria Silva",
+  },
+  public: {
+    title: "✏️ Editar texto da mensagem do link geral",
+    vars: COMMON_VARS,
+    defaultTemplate:
+      "🎉 Você está convidado(a) para o aniversário {aniversariante}!\n" +
+      "Veja os detalhes e confirme sua presença:\n{link}",
+    sample: "",
+  },
+};
 
-type P = { honoreeName: string; age: number | null; date: Date; venueName: string; waTemplate: string | null };
+type P = { honoreeName: string; age: number | null; date: Date; venueName: string };
 
-export function buildWaMessage(party: P, guestName: string, link: string, template?: string | null) {
-  const tpl = (template ?? party.waTemplate)?.trim() ? (template ?? party.waTemplate)! : DEFAULT_WA_TEMPLATE;
+export function buildWaMessage(party: P, kind: WaKind, guestName: string, link: string, saved?: string | null) {
+  const tpl = saved?.trim() ? saved : WA_KINDS[kind].defaultTemplate;
   const honoree = party.honoreeName.trim();
   const vars: Record<string, string> = {
-    nome: firstName(guestName),
+    nome: firstName(guestName || ""),
     aniversariante: honoree ? `de *${honoree}*` : "",
     idade: party.age ? `de ${party.age} anos` : "",
     data: fmtDate(party.date),
